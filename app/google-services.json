@@ -1,0 +1,107 @@
+{
+  "project_info": {
+    "project_number": "215085446874",
+    "firebase_url": "https://odoj-224810.firebaseio.com",
+    "project_id": "odoj-224810",
+    "storage_bucket": "odoj-224810.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:215085446874:android:53dcb39b0e13470d",
+        "android_client_info": {
+          "package_name": "id.odojadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "215085446874-0fa7tspe1r2afia3dn83m9b666o1o74n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.odojadmin",
+            "certificate_hash": "47ee88f420408d12b87c0bfea0ca253294ac06e1"
+          }
+        },
+        {
+          "client_id": "215085446874-mn4g5posvpnfm6jrknco089g0c6qd3ng.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.odojadmin",
+            "certificate_hash": "c8cfbac8bba8b0ceea63c15af9ed55bbf89d0b0c"
+          }
+        },
+        {
+          "client_id": "215085446874-h3bs4fssjp6chegc2vckjrald6un9oq5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDK12yjVd4ZdlG37VI9yrr7X2AUMxkUw9M"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "215085446874-h3bs4fssjp6chegc2vckjrald6un9oq5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:215085446874:android:d6b2148349c4a92a",
+        "android_client_info": {
+          "package_name": "id.realtimedatabase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "215085446874-c32gbmh2grauujks7ddktm6bmi1n91p0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.realtimedatabase",
+            "certificate_hash": "c8cfbac8bba8b0ceea63c15af9ed55bbf89d0b0c"
+          }
+        },
+        {
+          "client_id": "215085446874-h3bs4fssjp6chegc2vckjrald6un9oq5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDK12yjVd4ZdlG37VI9yrr7X2AUMxkUw9M"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "215085446874-h3bs4fssjp6chegc2vckjrald6un9oq5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

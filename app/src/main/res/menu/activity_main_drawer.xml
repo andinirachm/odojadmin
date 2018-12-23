@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_beranda"
+            android:icon="@drawable/ic_home"
+            android:title="Beranda" />
+        <item
+            android:id="@+id/nav_grup"
+            android:icon="@drawable/ic_group_"
+            android:title="Grup" />
+        <item
+            android:id="@+id/nav_member"
+            android:icon="@drawable/ic_people"
+            android:title="Member" />
+    </group>
+
+    <item android:title="Pengaturan">
+        <menu>
+            <item
+                android:id="@+id/nav_admin"
+                android:icon="@drawable/ic_person"
+                android:title="Admin" />
+            <item
+                android:id="@+id/nav_format_rekapan"
+                android:icon="@drawable/ic_format"
+                android:title="Format Rekapan" />
+            <item
+                android:id="@+id/nav_keluar"
+                android:icon="@drawable/ic_exit"
+                android:title="Keluar" />
+        </menu>
+    </item>
+
+</menu>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp">
+
+    <id.odojadmin.widget.TAGMediumText
+        android:id="@+id/text_view_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Info"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <id.odojadmin.widget.TAGMediumText
+        android:id="@+id/text_view_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="16dp"
+        android:text="Isiliah kolom 'Nama Admin' sesuai dengan nama yang didaftarkan. Nama ini akan digunakan untuk men-geneate secara otomatis laporan ke SG."
+        android:textSize="14sp" />
+
+    <id.odojadmin.widget.TAGBoldText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="16dp"
+        android:text="Contoh : "
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <id.odojadmin.widget.TAGMediumText
+        android:id="@+id/text_view_sample"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text=""
+        android:textSize="14sp"
+        android:textStyle="bold" />
+</LinearLayout>
