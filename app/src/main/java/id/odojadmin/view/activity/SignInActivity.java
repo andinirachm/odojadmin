@@ -10,22 +10,27 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import id.odojadmin.R;
 import id.odojadmin.controller.AdminController;
+import id.odojadmin.controller.GroupController;
 import id.odojadmin.event.LoginEvent;
 import id.odojadmin.event.SubscriberPriority;
 import id.odojadmin.helper.PreferenceHelper;
 import id.odojadmin.helper.Symbol;
 import id.odojadmin.model.Admin;
+import id.odojadmin.model.Group;
 import id.odojadmin.presenter.SignInPresenter;
 import id.odojadmin.view.interfaces.SignInView;
 import id.odojadmin.widget.TAGBookEditText;
 import id.odojadmin.widget.TAGMediumText;
 
-public class SignInActivity extends BaseActivity implements SignInView.View {
+public class SignInActivity extends BaseActivity {
 
     @BindView(R.id.edit_text_email)
     TAGBookEditText editTextEmail;
@@ -37,17 +42,17 @@ public class SignInActivity extends BaseActivity implements SignInView.View {
     private Admin adminLoggedIn;
     private String id;
     private AdminController controller;
-    private SignInPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         ButterKnife.bind(this);
-        presenter = new SignInPresenter(this, mFirebaseDatabase);
         eventBus.register(this, SubscriberPriority.HIGH);
         controller = new AdminController();
         setListenerDrawableRight();
+
+        group();
     }
 
     private void showDialogInfo(String type) {
@@ -96,7 +101,6 @@ public class SignInActivity extends BaseActivity implements SignInView.View {
     public void onBtnSignInClicked() {
         if (!editTextEmail.getText().toString().isEmpty()
                 && !editTextPassword.getText().toString().trim().isEmpty()) {
-            //presenter.login(editTextEmail.getText().toString().trim(), editTextPassword.getText().toString().trim());
             controller.login(editTextEmail.getText().toString().trim(), editTextPassword.getText().toString().trim());
         } else {
             Toast.makeText(this, "Silahkan lengkapi form di atas.", Toast.LENGTH_SHORT).show();
@@ -108,35 +112,28 @@ public class SignInActivity extends BaseActivity implements SignInView.View {
         startActivity(new Intent(SignInActivity.this, RegisterActivity.class));
     }
 
-    @Override
-    public void onSuccessLogin(Admin admin) {
-        adminLoggedIn = admin;
-        if (adminLoggedIn != null) {
-            id = editTextEmail.getText().toString().replace("@", "");
-            id = id.replace(".", "");
-            PreferenceHelper.getInstance().saveSession(PreferenceHelper.KEY_IS_AUTHENTICATED, true);
-            PreferenceHelper.getInstance().saveSession(PreferenceHelper.KEY_USER_ID, id);
-            Toast.makeText(SignInActivity.this, "Berhasil Login " + admin.getName() + adminLoggedIn.getName(), Toast.LENGTH_SHORT).show();
-        } else
-            Toast.makeText(SignInActivity.this, "Gagal Login", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onFailure(String s) {
-        Toast.makeText(SignInActivity.this, "Gagal Login " + s, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onShowLoading() {
-
-    }
-
-    @Override
-    public void onRemoveLoading() {
-
-    }
-
     public void onEventMainThread(LoginEvent event) {
-        Toast.makeText(SignInActivity.this, "LOGIN : "+event.isSuccess(), Toast.LENGTH_SHORT).show();
+        if (event.isSuccess()) {
+            adminLoggedIn = event.getAdmin();
+            if (adminLoggedIn != null) {
+                id = editTextEmail.getText().toString().replace("@", "");
+                id = id.replace(".", "");
+                PreferenceHelper.getInstance().saveSession(PreferenceHelper.KEY_IS_AUTHENTICATED, true);
+                PreferenceHelper.getInstance().saveSession(PreferenceHelper.KEY_USER_ID, id);
+                Toast.makeText(SignInActivity.this, "Berhasil Login " + adminLoggedIn.getName(), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, MainActivity.class));
+            } else
+                Toast.makeText(SignInActivity.this, "Gagal Login", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(SignInActivity.this, "Gagal Login", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void group() {
+//        Group group = new Group("325", 25, 0, "andinirachmahgmailcom");
+        GroupController controller = new GroupController();
+        /*Map<String, Object> hashMap = new HashMap<>();
+        hashMap.put("totalMember", 30);*/
+        controller.delete(325);
     }
 }

@@ -16,7 +16,7 @@ public class ApplicationMain extends Application {
     private static ApplicationMain instance;
     private static Context context;
     private EventBus eventBus;
-    private DatabaseReference firebaseDatabaseAdmin;
+    private DatabaseReference firebaseDatabaseAdmin, firebaseDatabaseGroup;
     public FirebaseDatabase firebaseInstance;
 
     public static synchronized ApplicationMain getInstance() {
@@ -49,6 +49,7 @@ public class ApplicationMain extends Application {
         eventBus = new EventBus();
         firebaseInstance = FirebaseDatabase.getInstance();
         firebaseDatabaseAdmin = firebaseInstance.getReference("admin");
+        firebaseDatabaseGroup = firebaseInstance.getReference("group");
     }
 
     public EventBus getEventBus() {
@@ -61,5 +62,9 @@ public class ApplicationMain extends Application {
 
     public DatabaseReference getFirebaseDatabaseAdmin() {
         return firebaseDatabaseAdmin;
+    }
+
+    public DatabaseReference getFirebaseDatabaseGroup() {
+        return firebaseDatabaseGroup;
     }
 }
