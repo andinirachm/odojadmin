@@ -4,12 +4,20 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import de.greenrobot.event.EventBus;
+
 public class ApplicationMain extends Application {
 
     public static final String TAG = ApplicationMain.class
             .getSimpleName();
     private static ApplicationMain instance;
     private static Context context;
+    private EventBus eventBus;
+    private DatabaseReference firebaseDatabaseAdmin;
+    public FirebaseDatabase firebaseInstance;
 
     public static synchronized ApplicationMain getInstance() {
         return instance;
@@ -38,5 +46,20 @@ public class ApplicationMain extends Application {
     public void onCreate() {
         instance = this;
         context = this;
+        eventBus = new EventBus();
+        firebaseInstance = FirebaseDatabase.getInstance();
+        firebaseDatabaseAdmin = firebaseInstance.getReference("admin");
+    }
+
+    public EventBus getEventBus() {
+        return eventBus;
+    }
+
+    public FirebaseDatabase getFirebaseInstance() {
+        return firebaseInstance;
+    }
+
+    public DatabaseReference getFirebaseDatabaseAdmin() {
+        return firebaseDatabaseAdmin;
     }
 }

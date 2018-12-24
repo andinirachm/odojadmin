@@ -35,5 +35,5 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.4'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.google.firebase:firebase-database:16.0.5'
-//    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'de.greenrobot:eventbus:2.4.1'
 }

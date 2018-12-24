@@ -14,6 +14,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import id.odojadmin.R;
+import id.odojadmin.controller.AdminController;
+import id.odojadmin.event.LoginEvent;
+import id.odojadmin.event.SubscriberPriority;
 import id.odojadmin.helper.PreferenceHelper;
 import id.odojadmin.helper.Symbol;
 import id.odojadmin.model.Admin;
@@ -33,6 +36,7 @@ public class SignInActivity extends BaseActivity implements SignInView.View {
 
     private Admin adminLoggedIn;
     private String id;
+    private AdminController controller;
     private SignInPresenter presenter;
 
     @Override
@@ -41,6 +45,8 @@ public class SignInActivity extends BaseActivity implements SignInView.View {
         setContentView(R.layout.activity_sign_in);
         ButterKnife.bind(this);
         presenter = new SignInPresenter(this, mFirebaseDatabase);
+        eventBus.register(this, SubscriberPriority.HIGH);
+        controller = new AdminController();
         setListenerDrawableRight();
     }
 
@@ -90,7 +96,8 @@ public class SignInActivity extends BaseActivity implements SignInView.View {
     public void onBtnSignInClicked() {
         if (!editTextEmail.getText().toString().isEmpty()
                 && !editTextPassword.getText().toString().trim().isEmpty()) {
-            presenter.login(editTextEmail.getText().toString().trim(), editTextPassword.getText().toString().trim());
+            //presenter.login(editTextEmail.getText().toString().trim(), editTextPassword.getText().toString().trim());
+            controller.login(editTextEmail.getText().toString().trim(), editTextPassword.getText().toString().trim());
         } else {
             Toast.makeText(this, "Silahkan lengkapi form di atas.", Toast.LENGTH_SHORT).show();
         }
@@ -127,5 +134,9 @@ public class SignInActivity extends BaseActivity implements SignInView.View {
     @Override
     public void onRemoveLoading() {
 
+    }
+
+    public void onEventMainThread(LoginEvent event) {
+        Toast.makeText(SignInActivity.this, "LOGIN : "+event.isSuccess(), Toast.LENGTH_SHORT).show();
     }
 }

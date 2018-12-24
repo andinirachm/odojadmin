@@ -10,16 +10,23 @@ import android.view.inputmethod.InputMethodManager;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import de.greenrobot.event.EventBus;
+import id.odojadmin.ApplicationMain;
+import id.odojadmin.event.SubscriberPriority;
+
 
 public class BaseActivity extends AppCompatActivity {
     public DatabaseReference mFirebaseDatabase;
     public FirebaseDatabase mFirebaseInstance;
+    public EventBus eventBus;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mFirebaseInstance = FirebaseDatabase.getInstance();
         mFirebaseDatabase = mFirebaseInstance.getReference("admin");
+        eventBus = ApplicationMain.getInstance().getEventBus();
+
 
     }
 
