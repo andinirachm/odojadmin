@@ -88,7 +88,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_exit_to_app_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_navigate_next_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -98,10 +98,10 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="5b5b5b" />
-                            <entry key="outputName" value="ic_exit" />
+                            <entry key="color" value="5dbcd2" />
+                            <entry key="outputName" value="ic_navigate" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="$USER_HOME$/Downloads/baseline-visibility_off-24px.svg" />
+                            <entry key="sourceFile" value="$USER_HOME$/Downloads/whatsapp-logo.svg" />
                           </map>
                         </option>
                       </PersistentState>

@@ -15,7 +15,7 @@
             android:theme="@style/AppTheme.NoTitleBar" />
         <activity
             android:name=".view.activity.SignInActivity"
-            android:theme="@style/AppTheme.NoTitleBar"></activity>
+            android:theme="@style/AppTheme.NoTitleBar" />
         <activity android:name=".view.activity.RekapanActivity" />
         <activity
             android:name=".view.activity.SplashActivity"
@@ -30,7 +30,10 @@
             android:name=".view.activity.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.activity.AdminSettingActivity"></activity>
+        <activity android:name=".view.activity.AdminSettingActivity" />
+        <activity android:name=".view.activity.CreateGroupActivity" />
+        <activity android:name=".view.activity.DetailGroupActivity"
+            android:theme="@style/AppTheme.NoTitleBar"></activity>
     </application>
 
 </manifest>

@@ -5,15 +5,17 @@ public class Group {
     private int totalMember;
     private int totalKholas;
     private String adminId;
+    private String jamKholas;
 
     public Group() {
     }
 
-    public Group(String id, int totalMember, int totalKholas, String adminId) {
+    public Group(String id, int totalMember, int totalKholas, String adminId, String jamKholas) {
         this.id = id;
         this.totalMember = totalMember;
         this.totalKholas = totalKholas;
         this.adminId = adminId;
+        this.jamKholas = jamKholas;
     }
 
     public String getId() {
@@ -46,5 +48,9 @@ public class Group {
 
     public void setAdminId(String adminId) {
         this.adminId = adminId;
+    }
+
+    public String getJamKholas() {
+        return jamKholas;
     }
 }

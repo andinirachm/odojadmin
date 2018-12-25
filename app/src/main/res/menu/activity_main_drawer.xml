@@ -10,12 +10,8 @@
             android:title="Beranda" />
         <item
             android:id="@+id/nav_grup"
-            android:icon="@drawable/ic_group_"
-            android:title="Grup" />
-        <item
-            android:id="@+id/nav_member"
             android:icon="@drawable/ic_people"
-            android:title="Member" />
+            android:title="Grup" />
     </group>
 
     <item android:title="Pengaturan">

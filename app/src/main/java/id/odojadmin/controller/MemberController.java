@@ -17,85 +17,81 @@ import java.util.Map;
 
 import id.odojadmin.ApplicationMain;
 import id.odojadmin.event.CommonEvent;
-import id.odojadmin.event.GetGroupByAdminIdEvent;
-import id.odojadmin.model.Group;
+import id.odojadmin.event.GetMemberByGroupIdEvent;
+import id.odojadmin.model.Member;
 
 /**
  * Created by Andini Rachmah on 24/12/18.
  */
 
-public class GroupController extends BaseController {
-    public void getAllGroupByAdminId(final String adminId) {
-        final List<Group> groupList = new ArrayList<>();
-        ApplicationMain.getInstance().getFirebaseDatabaseGroup().orderByChild("id").addValueEventListener(new ValueEventListener() {
+public class MemberController extends BaseController {
+    public void getAllMemberByGroupId(final int groupId) {
+        final List<Member> memberList = new ArrayList<>();
+        ApplicationMain.getInstance().getFirebaseDatabaseMember().orderByChild("id").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChildren()) {
-                    groupList.clear();
+                    memberList.clear();
                     for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
-                        Group group = noteDataSnapshot.getValue(Group.class);
-                        if (group.getAdminId() != null) {
-                            if (group.getAdminId().equals(adminId)) {
-                                groupList.add(group);
-                                eventBus.post(new GetGroupByAdminIdEvent(true, "Success", groupList));
-                            } else {
-                                eventBus.post(new GetGroupByAdminIdEvent(false, "Failure", null));
-                            }
+                        Member member = noteDataSnapshot.getValue(Member.class);
+                        if (member.getGroupId() == groupId) {
+                            memberList.add(member);
+                            eventBus.post(new GetMemberByGroupIdEvent(true, "Success", memberList));
+                        } else {
+                            eventBus.post(new GetMemberByGroupIdEvent(false, "Failure", memberList));
                         }
                     }
                 } else {
-                    eventBus.post(new GetGroupByAdminIdEvent(false, "Failure", null));
+                    eventBus.post(new GetMemberByGroupIdEvent(false, "Failure", memberList));
                 }
 
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                eventBus.post(new GetGroupByAdminIdEvent(false, "Failure " + databaseError.getMessage(), null));
+                eventBus.post(new GetMemberByGroupIdEvent(false, "Failure " + databaseError.getMessage(), memberList));
             }
         });
     }
 
-    public void createGroup(final Group group) {
-        ApplicationMain.getInstance().getFirebaseDatabaseGroup().child(group.getId()).setValue(group).addOnCompleteListener(new OnCompleteListener<Void>() {
+    public void addMember(final Member member) {
+        ApplicationMain.getInstance().getFirebaseDatabaseMember().child(member.getName()).setValue(member).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     eventBus.post(new CommonEvent(true, "Success"));
-                    System.out.println("GROUP CREATE S");
+                    System.out.println("MEMBER CREATE S");
                 } else {
                     eventBus.post(new CommonEvent(false, "Failure"));
-                    System.out.println("GROUP CREATE F");
+                    System.out.println("MEMBER CREATE F");
                 }
             }
         });
     }
 
-    public void update(final int groupId, final Map<String, Object> hashMap) {
-        ApplicationMain.getInstance().getFirebaseDatabaseGroup().child(String.valueOf(groupId)).updateChildren(hashMap, new DatabaseReference.CompletionListener() {
+    public void update(final String id, final Map<String, Object> hashMap) {
+        ApplicationMain.getInstance().getFirebaseDatabaseMember().child(id).updateChildren(hashMap, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                 databaseReference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         eventBus.post(new CommonEvent(true, "Success"));
-                        System.out.println("GROUP UPDATE S");
+                        System.out.println("MEMBER UPDATE S");
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         eventBus.post(new CommonEvent(false, "Failure"));
-                        System.out.println("GROUP UPDATE F");
+                        System.out.println("MEMBER UPDATE F");
                     }
                 });
             }
         });
     }
 
-    public void delete(final String groupId) {
-        System.out.println("GROUP DEL  " + groupId);
-        Query query = ApplicationMain.getInstance().getFirebaseDatabaseGroup().child(groupId);
-        System.out.println("QUE " + ((DatabaseReference) query).getKey());
+    public void delete(final String name) {
+        Query query = ApplicationMain.getInstance().getFirebaseDatabaseMember().child(name);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -103,7 +99,6 @@ public class GroupController extends BaseController {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         snapshot.getRef().removeValue();
                         eventBus.post(new CommonEvent(true, "Success"));
-                        System.out.println("GROUP DEL S");
                     }
                 } else {
                     eventBus.post(new CommonEvent(false, "Failure"));
@@ -113,7 +108,6 @@ public class GroupController extends BaseController {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 eventBus.post(new CommonEvent(false, "Failure"));
-                System.out.println("GROUP DEL F");
             }
         });
     }

@@ -10,9 +10,6 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -24,9 +21,6 @@ import id.odojadmin.event.SubscriberPriority;
 import id.odojadmin.helper.PreferenceHelper;
 import id.odojadmin.helper.Symbol;
 import id.odojadmin.model.Admin;
-import id.odojadmin.model.Group;
-import id.odojadmin.presenter.SignInPresenter;
-import id.odojadmin.view.interfaces.SignInView;
 import id.odojadmin.widget.TAGBookEditText;
 import id.odojadmin.widget.TAGMediumText;
 
@@ -134,6 +128,6 @@ public class SignInActivity extends BaseActivity {
         GroupController controller = new GroupController();
         /*Map<String, Object> hashMap = new HashMap<>();
         hashMap.put("totalMember", 30);*/
-        controller.delete(325);
+        //controller.delete(325);
     }
 }
