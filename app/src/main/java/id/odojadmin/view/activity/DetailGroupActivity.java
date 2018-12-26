@@ -1,11 +1,9 @@
 package id.odojadmin.view.activity;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
@@ -13,15 +11,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,16 +27,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import id.odojadmin.R;
+import id.odojadmin.controller.GroupController;
 import id.odojadmin.controller.MemberController;
+import id.odojadmin.event.GetDetailGroupEvent;
 import id.odojadmin.event.GetMemberByGroupIdEvent;
 import id.odojadmin.event.MemberClickEvent;
 import id.odojadmin.event.SubscriberPriority;
-import id.odojadmin.helper.Symbol;
+import id.odojadmin.model.Group;
 import id.odojadmin.model.Member;
 import id.odojadmin.view.adapter.MemberAdapter;
 import id.odojadmin.widget.TAGBoldText;
 import id.odojadmin.widget.TAGBookText;
-import id.odojadmin.widget.TAGMediumText;
 
 public class DetailGroupActivity extends BaseActivity {
     @BindView(R.id.text_view_name)
@@ -58,10 +54,13 @@ public class DetailGroupActivity extends BaseActivity {
     RecyclerView recyclerViewMember;
     private List<Member> memberList = new ArrayList<>();
     private MemberController controller;
+    private GroupController groupController;
     private int groupId;
     private MemberAdapter adapter;
     private View viewDetail;
     private String juzSelected;
+
+    private Group group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +73,8 @@ public class DetailGroupActivity extends BaseActivity {
         setRecyclerViewMember();
         groupId = getIntent().getIntExtra("groupId", 0);
         controller = new MemberController();
+        groupController = new GroupController();
+        groupController.getGroupDetail(String.valueOf(groupId));
         progressBar.setVisibility(View.VISIBLE);
         controller.getAllMemberByGroupId(groupId);
 
@@ -98,11 +99,6 @@ public class DetailGroupActivity extends BaseActivity {
 
     public void onEventMainThread(MemberClickEvent event) {
         showDialogDetail(event.getMember());
-    }
-
-    @OnClick(R.id.fab)
-    public void onViewClicked() {
-        showDialogAdd(false, null);
     }
 
     private void showDialogDetail(final Member member) {
@@ -285,5 +281,26 @@ public class DetailGroupActivity extends BaseActivity {
 
 
         alertDialog.show();
+    }
+
+    public void onEventMainThread(GetDetailGroupEvent event) {
+        if (event.isSuccess()) {
+            group= event.getGroupDetail();
+            textViewName.setText("Grup " + event.getGroupDetail().getId());
+            textViewTotalMember.setText(event.getGroupDetail().getTotalMember() + " Member");
+        }
+    }
+
+    @OnClick(R.id.btn_setting_group)
+    public void onBtnSettingGroupClicked() {
+        Map<String, Object> hashMap = new HashMap<>();
+        hashMap.put("adminId", group.getAdminId()+", susantiedewi18gmailcom");
+        groupController.update(groupId, hashMap);
+
+    }
+
+    @OnClick(R.id.fab)
+    public void onFabClicked() {
+        showDialogAdd(false, null);
     }
 }
