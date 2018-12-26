@@ -35,7 +35,6 @@ public class AdminController extends BaseController {
                         break;
                     } else {
                         eventBus.post(new LoginEvent(false, "Failure", null));
-                        break;
                     }
                 }
 

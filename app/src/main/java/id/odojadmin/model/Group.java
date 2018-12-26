@@ -1,5 +1,7 @@
 package id.odojadmin.model;
 
+import java.util.List;
+
 public class Group {
     private String id; //not editable
     private int totalMember;

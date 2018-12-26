@@ -24,7 +24,9 @@ import android.widget.Toast;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -100,7 +102,7 @@ public class DetailGroupActivity extends BaseActivity {
 
     @OnClick(R.id.fab)
     public void onViewClicked() {
-        showDialogAdd();
+        showDialogAdd(false, null);
     }
 
     private void showDialogDetail(final Member member) {
@@ -132,7 +134,7 @@ public class DetailGroupActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
-                Toast.makeText(DetailGroupActivity.this, "Edit", Toast.LENGTH_SHORT).show();
+                showDialogAdd(true, member);
             }
         });
 
@@ -161,9 +163,11 @@ public class DetailGroupActivity extends BaseActivity {
         alertDialog.show();
     }
 
-    private void showDialogAdd() {
+    private void showDialogAdd(final boolean isEdit, Member member) {
+        String juz, ab;
         final AlertDialog alertDialog;
-        juzSelected = "a";
+        if (!isEdit)
+            juzSelected = "a";
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_add_member, null);
@@ -177,8 +181,46 @@ public class DetailGroupActivity extends BaseActivity {
         final Button btnAdd = dialogView.findViewById(R.id.btn_add);
         final Button btnA = dialogView.findViewById(R.id.btn_a);
         final Button btnB = dialogView.findViewById(R.id.btn_b);
-        btnA.setSelected(true);
-        btnA.setTextColor(getResources().getColor(android.R.color.white));
+
+        if (isEdit) {
+            String[] part = member.getJuz().split("-");
+            juz = part[0];
+            ab = part[1];
+            juzSelected = ab;
+
+            editTextJuz.setText(juz);
+            if (ab.equals("a")) {
+                btnA.setSelected(true);
+                btnA.setTextColor(getResources().getColor(android.R.color.white));
+                btnB.setSelected(false);
+                btnB.setTextColor(getResources().getColor(R.color.colorPrimary));
+            } else {
+                btnA.setSelected(false);
+                btnA.setTextColor(getResources().getColor(R.color.colorPrimary));
+                btnB.setSelected(true);
+                btnB.setTextColor(getResources().getColor(android.R.color.white));
+            }
+
+            editTextNo.setText("" + member.getId());
+            editTextName.setText(member.getName());
+            editTextPhone.setText(member.getPhone());
+            if (member.getName().length() >= 0) {
+                String initial = member.getName().substring(0, 2);
+                textViewInitial.setText(initial.toUpperCase());
+            } else if (member.getName().length() == 1) {
+                String initial = member.getName().substring(0, 1);
+                textViewInitial.setText(initial.toUpperCase());
+            } else {
+                textViewInitial.setText("");
+            }
+
+            btnAdd.setText("Simpan");
+        } else {
+            btnA.setSelected(true);
+            btnA.setTextColor(getResources().getColor(android.R.color.white));
+        }
+
+
         editTextName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -205,8 +247,17 @@ public class DetailGroupActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
-                Member member = new Member(Integer.parseInt(editTextNo.getText().toString().trim()), editTextName.getText().toString().trim(), false, editTextJuz.getText().toString().trim() + "" + juzSelected, editTextPhone.getText().toString().trim(), false, groupId);
-                controller.addMember(member);
+                Member member = new Member(Integer.parseInt(editTextNo.getText().toString().trim()), editTextName.getText().toString().trim(), false, editTextJuz.getText().toString().trim() + "-" + juzSelected, editTextPhone.getText().toString().trim(), false, groupId);
+                if (!isEdit) {
+                    controller.addMember(member);
+                } else {
+                    Map<String, Object> hashMap = new HashMap<>();
+                    hashMap.put("id", Integer.parseInt(editTextNo.getText().toString().trim()));
+                    hashMap.put("name", editTextName.getText().toString().trim());
+                    hashMap.put("juz", editTextJuz.getText().toString().trim() + "-" + juzSelected);
+                    hashMap.put("phone", editTextPhone.getText().toString().trim());
+                    controller.update(editTextName.getText().toString().trim(), hashMap);
+                }
             }
         });
 

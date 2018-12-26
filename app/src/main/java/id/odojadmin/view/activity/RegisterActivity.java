@@ -2,14 +2,11 @@ package id.odojadmin.view.activity;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -19,6 +16,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import id.odojadmin.R;
+import id.odojadmin.controller.AdminController;
+import id.odojadmin.event.RegisterEvent;
+import id.odojadmin.event.SubscriberPriority;
 import id.odojadmin.helper.PreferenceHelper;
 import id.odojadmin.helper.Symbol;
 import id.odojadmin.model.Admin;
@@ -46,11 +46,14 @@ public class RegisterActivity extends BaseActivity {
     TAGBookEditText editTextEmail;
     @BindView(R.id.edit_text_password)
     TAGBookEditText editTextPassword;
+    @BindView(R.id.edit_text_phone)
+    TAGBookEditText editTextPhone;
 
     private int groupSelected = 0;
     private String id;
     private DatabaseReference mFirebaseDatabase;
     private FirebaseDatabase mFirebaseInstance;
+    private AdminController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +61,10 @@ public class RegisterActivity extends BaseActivity {
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
 
+        controller = new AdminController();
         mFirebaseInstance = FirebaseDatabase.getInstance();
         mFirebaseDatabase = mFirebaseInstance.getReference("admin");
+        eventBus.register(this, SubscriberPriority.HIGH);
 
         setListenerDrawableRight();
         setTotalGroup(1);
@@ -78,19 +83,8 @@ public class RegisterActivity extends BaseActivity {
                 id = editTextEmail.getText().toString().replace("@", "");
                 id = id.replace(".", "");
                 Admin admin = new Admin(editTextNoAdmin.getText().toString().trim(), editTextName.getText().toString().trim(), String.valueOf(groupSelected), editTextOriginGroup.getText().toString().trim(),
-                        editTextEmail.getText().toString().trim(), editTextPassword.getText().toString().trim());
-                mFirebaseDatabase.child(id).setValue(admin).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            PreferenceHelper.getInstance().saveSession(PreferenceHelper.KEY_IS_AUTHENTICATED, true);
-                            PreferenceHelper.getInstance().saveSession(PreferenceHelper.KEY_USER_ID, id);
-                            Toast.makeText(RegisterActivity.this, "Alhamdulillah Anda berhasil mendaftar!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(RegisterActivity.this, "Mohon maaf gagal mendaftar", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                        editTextEmail.getText().toString().trim(), editTextPassword.getText().toString().trim(), editTextPhone.getText().toString().trim());
+                controller.register(admin);
             }
         }
     }
@@ -137,7 +131,6 @@ public class RegisterActivity extends BaseActivity {
     }
 
     private void setListenerDrawableRight() {
-
         editTextNoAdmin.setDrawableClickListener(new TAGBookEditText.DrawableClickListener() {
             @Override
             public void onClick(DrawablePosition target) {
@@ -150,7 +143,6 @@ public class RegisterActivity extends BaseActivity {
                 }
             }
         });
-
 
         editTextName.setDrawableClickListener(new TAGBookEditText.DrawableClickListener() {
             @Override
@@ -192,6 +184,16 @@ public class RegisterActivity extends BaseActivity {
         });
     }
 
+    public void onEventMainThread(RegisterEvent event) {
+        if (event.isSuccess()) {
+            PreferenceHelper.getInstance().saveSession(PreferenceHelper.KEY_IS_AUTHENTICATED, true);
+            PreferenceHelper.getInstance().saveSession(PreferenceHelper.KEY_USER_ID, id);
+            Toast.makeText(RegisterActivity.this, "Alhamdulillah Anda berhasil mendaftar, silahkan login!", Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            Toast.makeText(RegisterActivity.this, "Mohon maaf gagal mendaftar", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @OnClick({R.id.btn_1, R.id.btn_2})
     public void onViewClicked(View view) {

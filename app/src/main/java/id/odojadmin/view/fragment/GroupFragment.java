@@ -15,6 +15,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import id.odojadmin.ApplicationMain;
 import id.odojadmin.R;
 import id.odojadmin.controller.GroupController;
 import id.odojadmin.event.GetGroupByAdminIdEvent;
@@ -29,6 +34,7 @@ import id.odojadmin.event.GroupClickEvent;
 import id.odojadmin.event.SubscriberPriority;
 import id.odojadmin.helper.PreferenceHelper;
 import id.odojadmin.model.Group;
+import id.odojadmin.model.Manager;
 import id.odojadmin.utils.ItemDecorationAlbumColumns;
 import id.odojadmin.view.activity.BaseFragment;
 import id.odojadmin.view.activity.DetailGroupActivity;
@@ -55,7 +61,7 @@ public class GroupFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         eventBus.register(this, SubscriberPriority.HIGH);
         controller = new GroupController();
-        controller.getAllGroupByAdminId(PreferenceHelper.getInstance().getSessionString(PreferenceHelper.KEY_USER_ID));
+
     }
 
     @Nullable
@@ -64,6 +70,7 @@ public class GroupFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_group, container, false);
         unbinder = ButterKnife.bind(this, view);
         setRecyclerViewGroup();
+        controller.getAllGroupByAdminId(PreferenceHelper.getInstance().getSessionString(PreferenceHelper.KEY_USER_ID));
         return view;
     }
 
@@ -111,7 +118,7 @@ public class GroupFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 Group group = new Group(editTextNoGroup.getText().toString().trim(), 0, 0,
-                        PreferenceHelper.getInstance().getSessionString(PreferenceHelper.KEY_USER_ID), editTextBatasLapor.getText().toString().trim());
+                        PreferenceHelper.getInstance().getSessionString(PreferenceHelper.KEY_USER_ID) + ",dewigmail.com", editTextBatasLapor.getText().toString().trim());
                 controller.createGroup(group);
                 alertDialog.dismiss();
             }

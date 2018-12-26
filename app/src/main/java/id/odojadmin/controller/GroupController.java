@@ -26,6 +26,7 @@ import id.odojadmin.model.Group;
 
 public class GroupController extends BaseController {
     public void getAllGroupByAdminId(final String adminId) {
+        System.out.println("ADMIN ID : "+adminId);
         final List<Group> groupList = new ArrayList<>();
         ApplicationMain.getInstance().getFirebaseDatabaseGroup().orderByChild("id").addValueEventListener(new ValueEventListener() {
             @Override
@@ -35,7 +36,8 @@ public class GroupController extends BaseController {
                     for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                         Group group = noteDataSnapshot.getValue(Group.class);
                         if (group.getAdminId() != null) {
-                            if (group.getAdminId().equals(adminId)) {
+                            if (group.getAdminId().contains(adminId)) {
+                                System.out.println("ADMIN IDO : "+group.getAdminId());
                                 groupList.add(group);
                                 eventBus.post(new GetGroupByAdminIdEvent(true, "Success", groupList));
                             } else {
@@ -51,6 +53,43 @@ public class GroupController extends BaseController {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                eventBus.post(new GetGroupByAdminIdEvent(false, "Failure " + databaseError.getMessage(), null));
+            }
+        });
+    }
+
+    public void getAllGroupByManagerId(final String adminId) {
+        final List<Group> groupList = new ArrayList<>();
+        ApplicationMain.getInstance().getFirebaseDatabaseGroup().orderByChild("id").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChildren()) {
+                    groupList.clear();
+                    for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                        Group group = noteDataSnapshot.getValue(Group.class);
+                        if (group.getManagerList() != null) {
+                            for (int i = 0; i < group.getManagerList().size(); i++) {
+                                if (group.getManagerList().get(i).equals(adminId)) {
+                                    groupList.add(group);
+                                    System.out.println("GROUP OLLA S "+group.getManagerList().get(i));
+                                    eventBus.post(new GetGroupByAdminIdEvent(true, "Success", groupList));
+                                } else {
+                                    System.out.println("GROUP OLLA F");
+                                    eventBus.post(new GetGroupByAdminIdEvent(false, "Failure", null));
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    System.out.println("GROUP OLLA F 2");
+                    eventBus.post(new GetGroupByAdminIdEvent(false, "Failure", null));
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("GROUP OLLA F3 " + databaseError.getMessage());
                 eventBus.post(new GetGroupByAdminIdEvent(false, "Failure " + databaseError.getMessage(), null));
             }
         });

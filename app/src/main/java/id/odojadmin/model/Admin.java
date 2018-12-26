@@ -10,11 +10,12 @@ public class Admin {
     private String origin;
     private String email;
     private String password;
+    private String phone;
 
     public Admin() {
     }
 
-    public Admin(String noAdmin, String name, String totalGroup, String origin, String email, String password) {
+    public Admin(String noAdmin, String name, String totalGroup, String origin, String email, String password, String phone) {
 
         this.noAdmin = noAdmin;
         this.name = name;
@@ -22,6 +23,7 @@ public class Admin {
         this.origin = origin;
         this.email = email;
         this.password = password;
+        this.phone= phone;
     }
 
     public String getNoAdmin() {
@@ -70,5 +72,9 @@ public class Admin {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPhone() {
+        return phone;
     }
 }
