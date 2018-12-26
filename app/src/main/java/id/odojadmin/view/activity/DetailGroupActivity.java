@@ -1,5 +1,6 @@
 package id.odojadmin.view.activity;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -8,13 +9,19 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +34,12 @@ import id.odojadmin.controller.MemberController;
 import id.odojadmin.event.GetMemberByGroupIdEvent;
 import id.odojadmin.event.MemberClickEvent;
 import id.odojadmin.event.SubscriberPriority;
+import id.odojadmin.helper.Symbol;
 import id.odojadmin.model.Member;
 import id.odojadmin.view.adapter.MemberAdapter;
 import id.odojadmin.widget.TAGBoldText;
 import id.odojadmin.widget.TAGBookText;
+import id.odojadmin.widget.TAGMediumText;
 
 public class DetailGroupActivity extends BaseActivity {
     @BindView(R.id.text_view_name)
@@ -49,8 +58,8 @@ public class DetailGroupActivity extends BaseActivity {
     private MemberController controller;
     private int groupId;
     private MemberAdapter adapter;
-    private BottomSheetDialog bottomSheetDetail;
     private View viewDetail;
+    private String juzSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,17 +98,28 @@ public class DetailGroupActivity extends BaseActivity {
         showDialogDetail(event.getMember());
     }
 
+    @OnClick(R.id.fab)
+    public void onViewClicked() {
+        showDialogAdd();
+    }
+
     private void showDialogDetail(final Member member) {
-        bottomSheetDetail = new BottomSheetDialog(this);
-        bottomSheetDetail.setContentView(viewDetail);
-        TextView textViewInitial = viewDetail.findViewById(R.id.text_view_initial);
-        TextView textViewName = viewDetail.findViewById(R.id.text_view_name);
-        TextView textViewStatus = viewDetail.findViewById(R.id.text_view_status);
-        Button btnEdit = viewDetail.findViewById(R.id.btn_edit);
-        Button btnKontak = viewDetail.findViewById(R.id.btn_kontak);
-        Button btnHapus = viewDetail.findViewById(R.id.btn_hapus);
+        final AlertDialog alertDialog;
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_detail_member, null);
+        dialogBuilder.setView(dialogView);
+        alertDialog = dialogBuilder.create();
+        TextView textViewInitial = dialogView.findViewById(R.id.text_view_initial);
+        TextView textViewName = dialogView.findViewById(R.id.text_view_name);
+        TextView textViewStatus = dialogView.findViewById(R.id.text_view_status);
+        TextView textViewJuz = dialogView.findViewById(R.id.text_view_juz);
+        Button btnEdit = dialogView.findViewById(R.id.btn_edit);
+        Button btnKontak = dialogView.findViewById(R.id.btn_kontak);
+        Button btnHapus = dialogView.findViewById(R.id.btn_hapus);
         String initial = member.getName().substring(0, 2);
         textViewInitial.setText(initial.toUpperCase());
+        textViewJuz.setText("Sedang tilawah juz " + member.getJuz());
         textViewName.setText(member.getName());
         if (!member.isKarantina()) {
             textViewStatus.setText("Member Aktif");
@@ -111,6 +131,7 @@ public class DetailGroupActivity extends BaseActivity {
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                alertDialog.dismiss();
                 Toast.makeText(DetailGroupActivity.this, "Edit", Toast.LENGTH_SHORT).show();
             }
         });
@@ -118,6 +139,8 @@ public class DetailGroupActivity extends BaseActivity {
         btnKontak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                alertDialog.dismiss();
                 String phone = member.getPhone().replace("08", "+628");
                 String url = "https://api.whatsapp.com/send?phone=" + phone;
                 Intent i = new Intent(Intent.ACTION_VIEW);
@@ -129,25 +152,87 @@ public class DetailGroupActivity extends BaseActivity {
         btnHapus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                alertDialog.dismiss();
                 controller.delete(member.getName());
                 Toast.makeText(DetailGroupActivity.this, "Hapus", Toast.LENGTH_SHORT).show();
             }
         });
 
-        bottomSheetDetail.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        alertDialog.show();
+    }
+
+    private void showDialogAdd() {
+        final AlertDialog alertDialog;
+        juzSelected = "a";
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_add_member, null);
+        dialogBuilder.setView(dialogView);
+        alertDialog = dialogBuilder.create();
+        final TextView textViewInitial = dialogView.findViewById(R.id.text_view_initial);
+        final EditText editTextName = dialogView.findViewById(R.id.edit_text_name);
+        final EditText editTextNo = dialogView.findViewById(R.id.edit_text_no);
+        final EditText editTextPhone = dialogView.findViewById(R.id.edit_text_phone);
+        final EditText editTextJuz = dialogView.findViewById(R.id.edit_text_juz);
+        final Button btnAdd = dialogView.findViewById(R.id.btn_add);
+        final Button btnA = dialogView.findViewById(R.id.btn_a);
+        final Button btnB = dialogView.findViewById(R.id.btn_b);
+        btnA.setSelected(true);
+        btnA.setTextColor(getResources().getColor(android.R.color.white));
+        editTextName.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
-                dialog.dismiss();
-                ((ViewGroup) viewDetail.getParent()).removeView(viewDetail);
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (count >= 2) {
+                    String initial = editTextName.getText().toString().trim().substring(0, 2);
+                    textViewInitial.setText(initial.toUpperCase());
+                } else if (count < 1) {
+                    textViewInitial.setText("");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
-        bottomSheetDetail.show();
-    }
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+                Member member = new Member(Integer.parseInt(editTextNo.getText().toString().trim()), editTextName.getText().toString().trim(), false, editTextJuz.getText().toString().trim() + "" + juzSelected, editTextPhone.getText().toString().trim(), false, groupId);
+                controller.addMember(member);
+            }
+        });
 
-    @OnClick(R.id.fab)
-    public void onViewClicked() {
-        Member member = new Member(6, "Assyfas", false, "10b", "081904940091", false, 137);
-        controller.addMember(member);
+        btnA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnA.setSelected(true);
+                btnA.setTextColor(getResources().getColor(android.R.color.white));
+                btnB.setSelected(false);
+                btnB.setTextColor(getResources().getColor(R.color.colorPrimary));
+                juzSelected = "a";
+            }
+        });
+
+        btnB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnA.setSelected(false);
+                btnA.setTextColor(getResources().getColor(R.color.colorPrimary));
+                btnB.setSelected(true);
+                btnB.setTextColor(getResources().getColor(android.R.color.white));
+                juzSelected = "b";
+            }
+        });
+
+
+        alertDialog.show();
     }
 }
