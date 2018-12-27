@@ -110,20 +110,21 @@ public class SignInActivity extends BaseActivity {
         if (event.isSuccess()) {
             adminLoggedIn = event.getAdmin();
             if (adminLoggedIn != null) {
-                Toast.makeText(SignInActivity.this, "HELLO 1 "+event.getMessage(), Toast.LENGTH_SHORT).show();
                 id = editTextEmail.getText().toString().replace("@", "");
                 id = id.replace(".", "");
                 PreferenceHelper.getInstance().saveSession(PreferenceHelper.KEY_IS_AUTHENTICATED, true);
                 PreferenceHelper.getInstance().saveSession(PreferenceHelper.KEY_USER_ID, id);
+                PreferenceHelper.getInstance().saveSession(PreferenceHelper.KEY_EMAIL, editTextEmail.getText().toString().trim());
                 Toast.makeText(SignInActivity.this, "Berhasil Login " + adminLoggedIn.getName(), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, MainActivity.class));
+                Intent i = new Intent(this, MainActivity.class);
+                i.putExtra("name", adminLoggedIn.getName());
+                i.putExtra("email", adminLoggedIn.getEmail());
+                startActivity(i);
             } else {
-//                Toast.makeText(SignInActivity.this, "Gagal Login", Toast.LENGTH_SHORT).show();
-                Toast.makeText(SignInActivity.this, "HELLO 2 "+event.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignInActivity.this, "Gagal Login", Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(SignInActivity.this, "HELLO 3 "+event.getMessage(), Toast.LENGTH_SHORT).show();
-//            Toast.makeText(SignInActivity.this, "Gagal Login", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignInActivity.this, "Gagal Login", Toast.LENGTH_SHORT).show();
         }
     }
 

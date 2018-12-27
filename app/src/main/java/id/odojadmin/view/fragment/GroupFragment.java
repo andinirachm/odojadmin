@@ -130,8 +130,8 @@ public class GroupFragment extends BaseFragment {
 
 
     public void onEventMainThread(GetGroupByAdminIdEvent event) {
-        groupList.clear();
         if (event.isSuccess()) {
+            groupList.clear();
             groupList.addAll(event.getGroupList());
             adapter.notifyDataSetChanged();
         } else {

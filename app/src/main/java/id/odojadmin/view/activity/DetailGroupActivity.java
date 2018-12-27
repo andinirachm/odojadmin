@@ -285,7 +285,7 @@ public class DetailGroupActivity extends BaseActivity {
 
     public void onEventMainThread(GetDetailGroupEvent event) {
         if (event.isSuccess()) {
-            group= event.getGroupDetail();
+            group = event.getGroupDetail();
             textViewName.setText("Grup " + event.getGroupDetail().getId());
             textViewTotalMember.setText(event.getGroupDetail().getTotalMember() + " Member");
         }
@@ -294,7 +294,7 @@ public class DetailGroupActivity extends BaseActivity {
     @OnClick(R.id.btn_setting_group)
     public void onBtnSettingGroupClicked() {
         Map<String, Object> hashMap = new HashMap<>();
-        hashMap.put("adminId", group.getAdminId()+", susantiedewi18gmailcom");
+        hashMap.put("adminId", group.getAdminId() + ", susantiedewi18gmailcom");
         groupController.update(groupId, hashMap);
 
     }

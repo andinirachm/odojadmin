@@ -37,11 +37,13 @@ public class GroupController extends BaseController {
                     for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                         Group group = noteDataSnapshot.getValue(Group.class);
                         if (group.getAdminId() != null) {
+                            System.out.println("ADMIN IDO : " + group.getAdminId());
                             if (group.getAdminId().contains(adminId)) {
-                                System.out.println("ADMIN IDO : " + group.getAdminId());
+                                System.out.println("ADMIN IDO : true");
                                 groupList.add(group);
                                 eventBus.post(new GetGroupByAdminIdEvent(true, "Success", groupList));
                             } else {
+                                System.out.println("ADMIN IDO : false");
                                 eventBus.post(new GetGroupByAdminIdEvent(false, "Failure", null));
                             }
                         }
