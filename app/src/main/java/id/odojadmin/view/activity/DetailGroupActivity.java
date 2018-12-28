@@ -294,8 +294,8 @@ public class DetailGroupActivity extends BaseActivity {
     @OnClick(R.id.btn_setting_group)
     public void onBtnSettingGroupClicked() {
         Map<String, Object> hashMap = new HashMap<>();
-        hashMap.put("adminId", group.getAdminId() + ", susantiedewi18gmailcom");
-        groupController.update(groupId, hashMap);
+        hashMap.put("adminId", group.getAdminId() + ", dewigmailcom");
+        groupController.update(groupId, "dewigmailcom", hashMap);
 
     }
 
