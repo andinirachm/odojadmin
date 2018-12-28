@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="6dp">
+
+    <id.odojadmin.widget.TAGBookText
+        android:id="@+id/text_view_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:background="@drawable/rect_blue_stroke"
+        android:gravity="center"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:paddingRight="50dp"
+        android:paddingBottom="10dp"
+        android:text="Andini"
+        android:textSize="14sp"
+        android:textColor="@color/colorPrimary" />
+
+    <ImageButton
+        android:id="@+id/btn_delete"
+        android:layout_width="30dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/ic_close_white"
+        android:background="@drawable/circle_blue"
+        android:layout_toRightOf="@id/text_view_name"
+        android:layout_marginLeft="-38dp"
+        android:layout_height="30dp" />
+
+</RelativeLayout>

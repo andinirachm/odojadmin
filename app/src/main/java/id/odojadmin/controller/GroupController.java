@@ -104,7 +104,7 @@ public class GroupController extends BaseController {
         });
     }
 
-    public void update(final int groupId, final String admin, final Map<String, Object> hashMap) {
+    public void addAdminToGroup(final int groupId, final String admin, final Map<String, Object> hashMap) {
         ApplicationMain.getInstance().getFirebaseDatabaseGroup().orderByChild("id").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -147,6 +147,27 @@ public class GroupController extends BaseController {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+    }
+
+    public void updateTotalMember(final int groupId, final Map<String, Object> hashMap) {
+        ApplicationMain.getInstance().getFirebaseDatabaseGroup().child(String.valueOf(groupId)).updateChildren(hashMap, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        eventBus.post(new CommonEvent(true, "Success"));
+                        System.out.println("GROUP TOTAL MEMBER S");
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        eventBus.post(new CommonEvent(false, "Failure"));
+                        System.out.println("GROUP TOTAL MEMBER F");
+                    }
+                });
             }
         });
     }

@@ -1,6 +1,8 @@
 package id.odojadmin.view.activity;
 
 import android.app.AlertDialog;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -35,6 +38,7 @@ import id.odojadmin.event.MemberClickEvent;
 import id.odojadmin.event.SubscriberPriority;
 import id.odojadmin.model.Group;
 import id.odojadmin.model.Member;
+import id.odojadmin.view.adapter.AdminAdapter;
 import id.odojadmin.view.adapter.MemberAdapter;
 import id.odojadmin.widget.TAGBoldText;
 import id.odojadmin.widget.TAGBookText;
@@ -52,6 +56,7 @@ public class DetailGroupActivity extends BaseActivity {
     ProgressBar progressBar;
     @BindView(R.id.recycler_view_member)
     RecyclerView recyclerViewMember;
+    RecyclerView recyclerViewAdmin;
     private List<Member> memberList = new ArrayList<>();
     private MemberController controller;
     private GroupController groupController;
@@ -91,11 +96,20 @@ public class DetailGroupActivity extends BaseActivity {
         if (event.isSuccess()) {
             memberList.clear();
             memberList.addAll(event.getMemberList());
+
+            updateTotalMember(memberList.size());
             adapter.notifyDataSetChanged();
         } else {
 
         }
     }
+
+    private void updateTotalMember(int total) {
+        Map<String, Object> hashMap = new HashMap<>();
+        hashMap.put("totalMember", total);
+        groupController.updateTotalMember(groupId, hashMap);
+    }
+
 
     public void onEventMainThread(MemberClickEvent event) {
         showDialogDetail(event.getMember());
@@ -283,6 +297,73 @@ public class DetailGroupActivity extends BaseActivity {
         alertDialog.show();
     }
 
+    private void setRecyclerViewAdmin(Context context, List<String> userList) {
+        AdminAdapter adapter = new AdminAdapter(this, userList);
+        recyclerViewAdmin.setLayoutManager(new LinearLayoutManager(context, LinearLayout.VERTICAL, false));
+        recyclerViewAdmin.setAdapter(adapter);
+    }
+
+    private void showDialogDetailGroup(final Group group) {
+        final AlertDialog alertDialog;
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.activity_group_setting, null);
+        dialogBuilder.setView(dialogView);
+        alertDialog = dialogBuilder.create();
+        TextView textViewName = dialogView.findViewById(R.id.text_view_name);
+        recyclerViewAdmin = dialogView.findViewById(R.id.recycler_view_admin);
+        TextView textViewTotalMember = dialogView.findViewById(R.id.text_view_total_member);
+        final EditText editTextBatasLapor = dialogView.findViewById(R.id.edit_text_batas_lapor);
+
+        textViewName.setText("Grup " + group.getId());
+        textViewTotalMember.setText(group.getTotalMember() + " Member");
+        editTextBatasLapor.setText(group.getJamKholas());
+        Button btnSave = dialogView.findViewById(R.id.btn_save);
+
+        editTextBatasLapor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(DetailGroupActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
+                        if (String.valueOf(minutes).length() == 1) {
+                            editTextBatasLapor.setText(hourOfDay + ":0" + minutes);
+                        } else {
+                            editTextBatasLapor.setText(hourOfDay + ":" + minutes);
+                        }
+
+                    }
+                }, 0, 0, true);
+                timePickerDialog.show();
+            }
+        });
+
+        setRecyclerViewAdmin(viewDetail.getContext(), userList(group.getAdminId()));
+        alertDialog.show();
+    }
+
+    private List<String> userList(String adminName) {
+        System.out.println("HOLLA : " + adminName);
+        int count = 1;
+        List<String> userList = new ArrayList<>();
+        String[] s;
+        for (int i = 0; i < adminName.length(); i++)
+            if (adminName.charAt(i) == ',')
+                count++;
+
+        System.out.println("HOLLA : " + count);
+        for (int i = 0; i < count; i++) {
+            s = adminName.split(",");
+            if (s[i].contains(" "))
+                s[i] = s[i].replace(" ", "");
+
+            System.out.println("HOLLA : " + s[i]);
+            userList.add(s[i]);
+        }
+
+        return userList;
+    }
+
     public void onEventMainThread(GetDetailGroupEvent event) {
         if (event.isSuccess()) {
             group = event.getGroupDetail();
@@ -293,14 +374,35 @@ public class DetailGroupActivity extends BaseActivity {
 
     @OnClick(R.id.btn_setting_group)
     public void onBtnSettingGroupClicked() {
-        Map<String, Object> hashMap = new HashMap<>();
-        hashMap.put("adminId", group.getAdminId() + ", dewigmailcom");
-        groupController.update(groupId, "dewigmailcom", hashMap);
+        //addAdmin("dewigmailcom");
+        if (group != null) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("group", group);
+            Intent intent = new Intent(this, GroupSettingActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
+    }
 
+    private void addAdmin(String adminId) {
+        Map<String, Object> hashMap = new HashMap<>();
+        hashMap.put("adminId", group.getAdminId() + ", " + adminId);
+        groupController.addAdminToGroup(groupId, adminId, hashMap);
     }
 
     @OnClick(R.id.fab)
     public void onFabClicked() {
         showDialogAdd(false, null);
+    }
+
+    @OnClick(R.id.btn_back)
+    public void onBtnBackClicked() {
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        eventBus.unregister(this);
     }
 }

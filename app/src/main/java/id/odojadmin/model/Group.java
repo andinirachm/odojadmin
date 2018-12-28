@@ -1,8 +1,8 @@
 package id.odojadmin.model;
 
-import java.util.List;
+import java.io.Serializable;
 
-public class Group {
+public class Group implements Serializable {
     private String id; //not editable
     private int totalMember;
     private int totalKholas;
