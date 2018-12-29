@@ -107,7 +107,7 @@ public class DetailGroupActivity extends BaseActivity {
     private void updateTotalMember(int total) {
         Map<String, Object> hashMap = new HashMap<>();
         hashMap.put("totalMember", total);
-        groupController.updateTotalMember(groupId, hashMap);
+        groupController.update(groupId, hashMap);
     }
 
 

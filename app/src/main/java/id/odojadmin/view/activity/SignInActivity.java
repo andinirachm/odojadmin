@@ -14,7 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import id.odojadmin.R;
-import id.odojadmin.controller.AdminController;
+import id.odojadmin.controller.UserController;
 import id.odojadmin.controller.GroupController;
 import id.odojadmin.event.LoginEvent;
 import id.odojadmin.event.SubscriberPriority;
@@ -35,7 +35,7 @@ public class SignInActivity extends BaseActivity {
 
     private Admin adminLoggedIn;
     private String id;
-    private AdminController controller;
+    private UserController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class SignInActivity extends BaseActivity {
         setContentView(R.layout.activity_sign_in);
         ButterKnife.bind(this);
         eventBus.register(this, SubscriberPriority.HIGH);
-        controller = new AdminController();
+        controller = new UserController();
         setListenerDrawableRight();
 
         group();
@@ -63,11 +63,11 @@ public class SignInActivity extends BaseActivity {
 
         if (!type.equalsIgnoreCase("Total Grup")) {
             sample = Symbol.checkList + "22-Dini-G-137-08/12/2018-05.36\n" +
-                    Symbol.checkList + "22-Dini-Ad-137-08/12/2018-" + Symbol.crown + "24-" + Symbol.female + "30-" + Symbol.clock + "21.00";
+                    Symbol.checkList + "22-Dini-Ad-137-08/12/2018-" + Symbol.crown + "24-" + Symbol.women + "30-" + Symbol.clock + "21.00";
         } else {
             sample = Symbol.checkList + "22-Dini-G-137-08/12/2018-05.36\n" +
-                    Symbol.checkList + "22-Dini-Ad-137-08/12/2018-" + Symbol.crown + "29-" + Symbol.female + "30-" + Symbol.clock + "21.00\n" +
-                    Symbol.checkList + "22-Dini-Ad-325-08/12/2018-" + Symbol.crown + "24-" + Symbol.female + "27-" + Symbol.clock + "21.00";
+                    Symbol.checkList + "22-Dini-Ad-137-08/12/2018-" + Symbol.crown + "29-" + Symbol.women + "30-" + Symbol.clock + "21.00\n" +
+                    Symbol.checkList + "22-Dini-Ad-325-08/12/2018-" + Symbol.crown + "24-" + Symbol.women + "27-" + Symbol.clock + "21.00";
 
         }
         textSample.setText(StringEscapeUtils.unescapeJava(sample));

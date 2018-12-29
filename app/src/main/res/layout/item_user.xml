@@ -13,7 +13,7 @@
         android:gravity="center"
         android:paddingLeft="16dp"
         android:paddingTop="10dp"
-        android:paddingRight="50dp"
+        android:paddingRight="10dp"
         android:paddingBottom="10dp"
         android:text="Andini"
         android:textSize="14sp"
@@ -22,6 +22,7 @@
     <ImageButton
         android:id="@+id/btn_delete"
         android:layout_width="30dp"
+        android:visibility="gone"
         android:layout_marginTop="5dp"
         android:src="@drawable/ic_close_white"
         android:background="@drawable/circle_blue"

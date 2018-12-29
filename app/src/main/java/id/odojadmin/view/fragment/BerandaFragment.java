@@ -35,7 +35,7 @@ import id.odojadmin.view.activity.BaseFragment;
 import id.odojadmin.view.activity.DetailGroupActivity;
 import id.odojadmin.view.adapter.GroupAdapter;
 
-public class GroupFragment extends BaseFragment {
+public class BerandaFragment extends BaseFragment {
     @BindView(R.id.recycler_view_group)
     RecyclerView recyclerViewGroup;
     @BindView(R.id.progress_bar)
@@ -47,8 +47,8 @@ public class GroupFragment extends BaseFragment {
     private List<Group> groupList = new ArrayList<>();
     private GroupAdapter adapter;
 
-    public static GroupFragment newInstance() {
-        GroupFragment fragment = new GroupFragment();
+    public static BerandaFragment newInstance() {
+        BerandaFragment fragment = new BerandaFragment();
         return fragment;
     }
 

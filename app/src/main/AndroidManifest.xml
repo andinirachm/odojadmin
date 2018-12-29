@@ -10,6 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="fontProviderRequests"
+            android:value="Noto Color Emoji Compat" />
         <activity
             android:name=".view.activity.RegisterActivity"
             android:theme="@style/AppTheme.NoTitleBar" />
@@ -31,13 +34,13 @@
             android:label="@string/title_activity_main"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.activity.AdminSettingActivity" />
+        <activity android:name=".view.activity.UserSettingActivity" />
         <activity android:name=".view.activity.CreateGroupActivity" />
         <activity
             android:name=".view.activity.DetailGroupActivity"
             android:theme="@style/AppTheme.NoTitleBar" />
-        <activity android:name=".view.activity.GroupSettingActivity"
-            android:theme="@style/AppTheme.NoTitleBar" ></activity>
+        <activity android:name=".view.activity.GroupSettingActivity" />
+        <activity android:name=".view.activity.FormatRekapanActivity"></activity>
     </application>
 
 </manifest>

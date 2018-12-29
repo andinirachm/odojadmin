@@ -77,4 +77,5 @@ public class ApplicationMain extends Application {
     public DatabaseReference getFirebaseDatabaseRekapan() {
         return firebaseDatabaseRekapan;
     }
+
 }

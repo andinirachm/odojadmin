@@ -151,7 +151,7 @@ public class GroupController extends BaseController {
         });
     }
 
-    public void updateTotalMember(final int groupId, final Map<String, Object> hashMap) {
+    public void update(final int groupId, final Map<String, Object> hashMap) {
         ApplicationMain.getInstance().getFirebaseDatabaseGroup().child(String.valueOf(groupId)).updateChildren(hashMap, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {

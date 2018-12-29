@@ -1,5 +1,6 @@
 package id.odojadmin.view.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -7,7 +8,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +20,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import id.odojadmin.R;
-import id.odojadmin.controller.AdminController;
+import id.odojadmin.controller.UserController;
 import id.odojadmin.event.GetDetailUserEvent;
 import id.odojadmin.event.SubscriberPriority;
 import id.odojadmin.helper.PreferenceHelper;
@@ -35,7 +38,8 @@ public class MainActivity extends BaseActivity
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
 
-    private AdminController controller;
+    private UserController controller;
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +57,7 @@ public class MainActivity extends BaseActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        controller = new AdminController();
+        controller = new UserController();
         controller.getAdminDetail(PreferenceHelper.getInstance().getSessionString(PreferenceHelper.KEY_EMAIL));
 
         View headerLayout = navigationView.getHeaderView(0);
@@ -61,6 +65,10 @@ public class MainActivity extends BaseActivity
         textViewName = headerLayout.findViewById(R.id.text_view_name);
         textViewEmail = headerLayout.findViewById(R.id.text_view_email);
         navigationView.setNavigationItemSelectedListener(this);
+
+        getSupportActionBar().setTitle("Beranda");
+        addFragment(GroupFragment.newInstance());
+        navigationView.getMenu().getItem(0).setChecked(true);
     }
 
     @Override
@@ -101,20 +109,18 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_beranda) {
-
+            getSupportActionBar().setTitle("Beranda");
+            addFragment(GroupFragment.newInstance());
         } else if (id == R.id.nav_grup) {
             getSupportActionBar().setTitle("Grup");
             addFragment(GroupFragment.newInstance());
 
         } else if (id == R.id.nav_admin) {
-            startActivity(new Intent(this, AdminSettingActivity.class));
+            startActivity(new Intent(this, UserSettingActivity.class));
         } else if (id == R.id.nav_format_rekapan) {
-
+            startActivity(new Intent(this, FormatRekapanActivity.class));
         } else if (id == R.id.nav_keluar) {
-            PreferenceHelper.getInstance().logout();
-            Intent i = new Intent(this, SignInActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
+            showDialogLogout();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -134,6 +140,47 @@ public class MainActivity extends BaseActivity
             textViewName.setText(event.getAdmin().getName());
             textViewEmail.setText(event.getAdmin().getEmail());
         }
+    }
+
+    private void showDialogLogout() {
+        LayoutInflater li = LayoutInflater.from(this);
+        final View dialogView = li.inflate(R.layout.dialog_logout, null);
+
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setView(dialogView);
+
+        alertDialog.setCancelable(true);
+        alertDialog.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (PreferenceHelper.getInstance().isAuthenticated()) {
+                    PreferenceHelper.getInstance().logout();
+                    Intent i = new Intent(MainActivity.this, SignInActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                }
+                dialog.dismiss();
+            }
+        });
+
+        alertDialog.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+
+        dialog = alertDialog.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(android.R.color.black));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(android.R.color.black));
+            }
+        });
+
+        dialog.show();
     }
 
 }

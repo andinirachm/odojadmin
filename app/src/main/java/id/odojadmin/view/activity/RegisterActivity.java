@@ -10,13 +10,11 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import id.odojadmin.R;
-import id.odojadmin.controller.AdminController;
+import id.odojadmin.controller.UserController;
 import id.odojadmin.event.RegisterEvent;
 import id.odojadmin.event.SubscriberPriority;
 import id.odojadmin.helper.PreferenceHelper;
@@ -53,7 +51,7 @@ public class RegisterActivity extends BaseActivity {
     private String id;
     private DatabaseReference mFirebaseDatabase;
     private FirebaseDatabase mFirebaseInstance;
-    private AdminController controller;
+    private UserController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +59,7 @@ public class RegisterActivity extends BaseActivity {
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
 
-        controller = new AdminController();
+        controller = new UserController();
         mFirebaseInstance = FirebaseDatabase.getInstance();
         mFirebaseDatabase = mFirebaseInstance.getReference("admin");
         eventBus.register(this, SubscriberPriority.HIGH);
@@ -117,15 +115,15 @@ public class RegisterActivity extends BaseActivity {
         textDesc.setText("Isiliah kolom '" + type + "' sesuai dengan yang didaftarkan. " + type + " ini akan digunakan untuk men-generate secara otomatis laporan ke SG.");
 
         if (!type.equalsIgnoreCase("Total Grup")) {
-            sample = Symbol.checkList + "22-Dini-G-137-08/12/2018-05.36\n" +
-                    Symbol.checkList + "22-Dini-Ad-137-08/12/2018-" + Symbol.crown + "24-" + Symbol.female + "30-" + Symbol.clock + "21.00";
+            sample = Symbol.getCheckList() + "22-Dini-G-137-08/12/2018-05.36\n" +
+                    Symbol.getCheckList() + "22-Dini-Ad-137-08/12/2018-" + Symbol.getCrown() + "24-" + Symbol.getWomen() + "30-" + Symbol.getClock() + "21.00";
         } else {
-            sample = Symbol.checkList + "22-Dini-G-137-08/12/2018-05.36\n" +
-                    Symbol.checkList + "22-Dini-Ad-137-08/12/2018-" + Symbol.crown + "29-" + Symbol.female + "30-" + Symbol.clock + "21.00\n" +
-                    Symbol.checkList + "22-Dini-Ad-325-08/12/2018-" + Symbol.crown + "24-" + Symbol.female + "27-" + Symbol.clock + "21.00";
+            sample = Symbol.getCheckList() + "22-Dini-G-137-08/12/2018-05.36\n" +
+                    Symbol.getCheckList() + "22-Dini-Ad-137-08/12/2018-" + Symbol.getCrown() + "29-" + Symbol.getWomen() + "30-" + Symbol.getClock() + "21.00\n" +
+                    Symbol.getCheckList() + "22-Dini-Ad-325-08/12/2018-" + Symbol.getCrown() + "24-" + Symbol.getWomen() + "27-" + Symbol.getClock() + "21.00";
 
         }
-        textSample.setText(StringEscapeUtils.unescapeJava(sample));
+        textSample.setText(sample);
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
     }
@@ -136,7 +134,7 @@ public class RegisterActivity extends BaseActivity {
             public void onClick(DrawablePosition target) {
                 switch (target) {
                     case RIGHT:
-                        showDialogInfo("Nomor Urut Admin");
+                        showDialogInfo("Nomor Urut Pengguna");
                         break;
                     default:
                         break;
@@ -149,7 +147,7 @@ public class RegisterActivity extends BaseActivity {
             public void onClick(DrawablePosition target) {
                 switch (target) {
                     case RIGHT:
-                        showDialogInfo("Nama Admin");
+                        showDialogInfo("Nama Pengguna");
                         break;
                     default:
                         break;
@@ -162,7 +160,7 @@ public class RegisterActivity extends BaseActivity {
             public void onClick(DrawablePosition target) {
                 switch (target) {
                     case RIGHT:
-                        showDialogInfo("Grup Asal Admin");
+                        showDialogInfo("Grup Asal Pengguna");
                         break;
                     default:
                         break;

@@ -8,7 +8,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Map;
@@ -25,7 +24,7 @@ import id.odojadmin.model.Admin;
  * Created by Andini Rachmah on 24/12/18.
  */
 
-public class AdminController extends BaseController {
+public class UserController extends BaseController {
     Admin admin = null;
 
     public void login(final String email, final String password) {

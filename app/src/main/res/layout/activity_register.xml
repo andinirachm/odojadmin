@@ -46,7 +46,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableRight="@drawable/ic_info"
-                        android:hint="Nomor Urut Admin"
+                        android:hint="Nomor Urut Pengguna"
                         android:inputType="number"
                         android:textSize="15sp" />
                 </android.support.design.widget.TextInputLayout>
@@ -65,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:drawableRight="@drawable/ic_info"
                         android:drawablePadding="10dp"
-                        android:hint="Grup Asal Admin"
+                        android:hint="Grup Asal Pengguna"
                         android:inputType="number"
                         android:textSize="15sp" />
                 </android.support.design.widget.TextInputLayout>
@@ -82,7 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/ic_info"
-                    android:hint="Nama Admin"
+                    android:hint="Nama Pengguna"
                     android:inputType="textCapWords"
                     android:textSize="15sp" />
             </android.support.design.widget.TextInputLayout>

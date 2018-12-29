@@ -7,11 +7,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +24,6 @@ import id.odojadmin.R;
 import id.odojadmin.controller.GroupController;
 import id.odojadmin.model.Group;
 import id.odojadmin.view.adapter.AdminAdapter;
-import id.odojadmin.widget.TAGAutocomplete;
 import id.odojadmin.widget.TAGBookEditText;
 import id.odojadmin.widget.TAGBookText;
 import id.odojadmin.widget.TAGHeavyText;
@@ -38,19 +36,21 @@ public class GroupSettingActivity extends AppCompatActivity {
     TAGBookText textViewTotalMember;
     @BindView(R.id.recycler_view_admin)
     RecyclerView recyclerViewAdmin;
-    @BindView(R.id.auto_complete_text_admin)
-    TAGAutocomplete autoCompleteTextAdmin;
     @BindView(R.id.edit_text_batas_lapor)
     TAGBookEditText editTextBatasLapor;
 
     private Group group;
     private GroupController groupController;
+    private int hour, minute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_setting);
         ButterKnife.bind(this);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Pengaturan Grup");
 
         groupController = new GroupController();
 
@@ -63,6 +63,14 @@ public class GroupSettingActivity extends AppCompatActivity {
         editTextBatasLapor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!editTextBatasLapor.getText().toString().trim().isEmpty()) {
+                    String s[] = editTextBatasLapor.getText().toString().trim().split(":");
+                    hour = Integer.parseInt(s[0]);
+                    minute = Integer.parseInt(s[1]);
+                } else {
+                    hour = 0;
+                    minute = 0;
+                }
                 TimePickerDialog timePickerDialog = new TimePickerDialog(GroupSettingActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
@@ -73,7 +81,7 @@ public class GroupSettingActivity extends AppCompatActivity {
                         }
 
                     }
-                }, 0, 0, true);
+                }, hour, minute, true);
                 timePickerDialog.show();
             }
         });
@@ -114,5 +122,18 @@ public class GroupSettingActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_save)
     public void onViewClicked() {
+        Map<String, Object> hashMap = new HashMap<>();
+        hashMap.put("jamKholas", editTextBatasLapor.getText().toString().trim());
+        groupController.update(Integer.parseInt(group.getId()), hashMap);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
     }
 }

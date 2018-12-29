@@ -2,8 +2,53 @@ package id.odojadmin.helper;
 
 public class Symbol {
     //rekapan SG
-    public static final String checkList = "\u2705";
-    public static final String crown = "\uD83D\uDC51";
-    public static final String female = "\u0009\uD83D\uDEBA";
-    public static final String clock = "\u23F0";
+    public static final int crown = 0x1F451;
+    public static final int checkList = 0x2705;
+    public static final int clock = 0x1F556;
+    public static final int women = 0x1F6BA;
+
+    public static final String zero = "\u0030\u20E3";
+    public static final String one = "\u0031\u20E3";
+    public static final String two = "\u0032\u20E3";
+    public static final String three = "\u0033\u20E3";
+    public static final String four = "\u0034\u20E3";
+    public static final String five = "\u0035\u20E3";
+    public static final String six = "\u0036\u20E3";
+    public static final String seven = "\u0037\u20E3";
+    public static final String eight = "\u0038\u20E3";
+    public static final String nine = "\u0039\u20E3";
+
+    public static final String tandaTanya = "\u2753";
+    public static final String tandaSilang = "\u274c";
+    public static final String calendar = "\uD83D\uDCC5";
+    public static final String cd = "\uD83D\uDCBF";
+    public static final String book = "\uD83D\uDCD6";
+    public static final String recycle = "\u267B";
+    public static final String batasLapor = "\u26D4";
+
+    public static final String sunFlower ="\uD83C\uDF3B";
+    public static final String divider ="\uD83C\uDF3F\uD83C\uDF3B\uD83C\uDF3F\uD83C\uDF3B\uD83C\uDF3F\uD83C\uDF3B\uD83C\uDF3F\uD83C\uDF3B\uD83C\uDF3F\uD83C\uDF3B\uD83C\uDF3F";
+    public static final String womanHijab = "\uD83E\uDDD5\uD83C\uDFFB";
+    public static final String admin = "\uD83D\uDC69\uD83C\uDFFB\u200D\uD83D\uDCBB";
+
+
+    public static String getEmojiByUnicode(int unicode) {
+        return new String(Character.toChars(unicode));
+    }
+
+    public static String getCheckList() {
+        return getEmojiByUnicode(checkList);
+    }
+
+    public static String getCrown() {
+        return getEmojiByUnicode(crown);
+    }
+
+    public static String getClock() {
+        return getEmojiByUnicode(clock);
+    }
+
+    public static String getWomen() {
+        return getEmojiByUnicode(women);
+    }
 }
