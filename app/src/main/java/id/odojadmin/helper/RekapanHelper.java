@@ -2,19 +2,23 @@ package id.odojadmin.helper;
 
 import java.util.List;
 
+import id.odojadmin.model.FormatRekapan;
+import id.odojadmin.model.Group;
 import id.odojadmin.model.Member;
 
 public class RekapanHelper {
-    public static String showRekap(String group, String day, String date, String admin, String asmin,
-                                   String pjh, String batasLapor, List<Member> memberList) {
+    public static String getRekapan(final Group group,
+                                    String pjh, FormatRekapan rekapan, List<Member> memberList) {
+
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Bismillaahirrahmaanirrahiim.\n\n" +
-                Symbol.book + " *LIST TILAWAH ODALF " + group + "* " + Symbol.book + "\n\n" +
-                Symbol.calendar + " *" + day + ", " + date + "*\n" +
-                Symbol.admin + " *Admin :* " + admin + "\n" +
-                Symbol.admin + " *Asmin :* " + asmin + "\n" +
-                Symbol.womanHijab + " *PJH :* " + pjh + "\n" +
-                Symbol.batasLapor + " *Batas Lapor :* " + batasLapor + "WIB \n\n" +
+        stringBuilder.append("Bismillaahirrahmaanirrahiim..\n\n" +
+                Symbol.yellowBook + " *LIST TILAWAH ODALF " + group.getId() + "* " + Symbol.yellowBook + "\n\n" +
+                Symbol.calendar + " *" + DateHelper.getCurrentDate() + "*\n" +
+                Symbol.admin + " *Admin :* " + group.getAdminName() + "\n");
+        if (!group.getAsmin().isEmpty())
+            stringBuilder.append(Symbol.admin + " *Asmin :* " + group.getAsmin() + "\n");
+        stringBuilder.append(Symbol.womanHijab + " *PJH :* " + pjh + "\n" +
+                Symbol.batasLapor + " *Batas Lapor :* " + group.getJamKholas() + " WIB \n\n" +
                 Symbol.divider + "\n\n");
 
         for (int i = 0; i < memberList.size(); i++) {
@@ -82,15 +86,47 @@ public class RekapanHelper {
                 no = Symbol.three + Symbol.zero;
             }
 
-            stringBuilder.append(no + " " + member.getName() + " ~ " + member.getJuz().replace("-", "") + "\n");
+            if (member.getKholas().equals("b"))
+                stringBuilder.append(no + " " + member.getName() + " ~ " + member.getJuz().replace("-", "") + " " + Symbol.recycle + "\n");
+            else if (member.getKholas().equals("t"))
+                stringBuilder.append(no + " " + member.getName() + " ~ " + member.getJuz().replace("-", "") + " " + Symbol.tandaSilang + "\n");
+            else if (member.getKholas().equals("k"))
+                stringBuilder.append(no + " " + member.getName() + " ~ " + member.getJuz().replace("-", "") + " " + Symbol.star + "\n");
 
             if (i == 9 || i == 19 || i == 29) {
                 stringBuilder.append("\n " + Symbol.divider + "\n\n");
             }
+
         }
 
+        stringBuilder.append("\n*UNTUK YANG HAID WAJIB AMBIL :*\n");
+        stringBuilder.append(Symbol.tunjukKanan + "Opsi 1 : Baca terjemah " + Symbol.book + "\n" +
+                Symbol.tunjukKanan + "Opsi 2 : Dengar murottal " + Symbol.cd + "\n\n");
+
+        stringBuilder.append(rekapan.getIconKholas() + " : Kholas\n");
+        if (!rekapan.getIconBelumKholas().isEmpty())
+            stringBuilder.append(rekapan.getIconBelumKholas() + " : Belum Kholas\n");
+        stringBuilder.append(rekapan.getIconKholasTelat() + " : Kholas Telat\n");
+        stringBuilder.append(rekapan.getIconTidakKholas() + " : Tidak Kholas\n");
+        stringBuilder.append(rekapan.getIconKholas1Juz() + " : Kholas 1 juz\n");
+        stringBuilder.append(rekapan.getIconKholasLebih1Juz() + " : Kholas lebih dari 1 juz\n");
+        stringBuilder.append(rekapan.getIconAlKahfi() + " : Al Kahfi (tiap Jum'at dihitung ½ juz kholas)\n");
+        stringBuilder.append(Symbol.haid + " : Haid\n\n");
+
+        stringBuilder.append(Symbol.dividerTotalKholas + "\n");
+        stringBuilder.append("*Total kholas : " + group.getTotalKholas() + " dari " + group.getTotalMember() + " member*\n");
+        stringBuilder.append(Symbol.dividerTotalKholas + "\n\n");
+
+        stringBuilder.append(Symbol.divider + "\n\n");
+
+        if (!rekapan.getSpritWords().isEmpty()) {
+            stringBuilder.append(rekapan.getSpritWords() + "\n\n");
+            stringBuilder.append(Symbol.divider + "\n\n");
+        }
+
+        stringBuilder.append("*Mohon dikoreksi apabila ada kesalahan*\n");
+        stringBuilder.append(Symbol.sunFlower + " Kholas di awal waktu lebih utama " + Symbol.sunFlower + "\n\n");
+        stringBuilder.append("*#salam" + Symbol.fiveHand + "lembar*\n");
         return stringBuilder.toString();
     }
-
-
 }

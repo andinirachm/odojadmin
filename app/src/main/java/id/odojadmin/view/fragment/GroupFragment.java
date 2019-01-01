@@ -24,11 +24,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import id.odojadmin.R;
+import id.odojadmin.controller.FormatRekapanController;
 import id.odojadmin.controller.GroupController;
 import id.odojadmin.event.GetGroupByAdminIdEvent;
 import id.odojadmin.event.GroupClickEvent;
 import id.odojadmin.event.SubscriberPriority;
 import id.odojadmin.helper.PreferenceHelper;
+import id.odojadmin.helper.Symbol;
+import id.odojadmin.model.FormatRekapan;
 import id.odojadmin.model.Group;
 import id.odojadmin.utils.ItemDecorationAlbumColumns;
 import id.odojadmin.view.activity.BaseFragment;
@@ -46,6 +49,7 @@ public class GroupFragment extends BaseFragment {
     private GroupController controller;
     private List<Group> groupList = new ArrayList<>();
     private GroupAdapter adapter;
+    private FormatRekapanController formatRekapanController;
 
     public static GroupFragment newInstance() {
         GroupFragment fragment = new GroupFragment();
@@ -58,7 +62,7 @@ public class GroupFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         eventBus.register(this, SubscriberPriority.HIGH);
         controller = new GroupController();
-
+        formatRekapanController = new FormatRekapanController();
     }
 
     @Nullable
@@ -92,6 +96,7 @@ public class GroupFragment extends BaseFragment {
         final View dialogView = inflater.inflate(R.layout.dialog_create_group, null);
         final EditText editTextNoGroup = dialogView.findViewById(R.id.edit_text_no_group);
         final EditText editTextBatasLapor = dialogView.findViewById(R.id.edit_text_batas_lapor);
+        final EditText editTextAsmin = dialogView.findViewById(R.id.edit_text_asmin);
         Button btnCreate = dialogView.findViewById(R.id.btn_create);
 
         editTextBatasLapor.setOnClickListener(new View.OnClickListener() {
@@ -115,8 +120,14 @@ public class GroupFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 Group group = new Group(editTextNoGroup.getText().toString().trim(), 0, 0,
-                        PreferenceHelper.getInstance().getSessionString(PreferenceHelper.KEY_USER_ID) + ",dewigmail.com", editTextBatasLapor.getText().toString().trim());
+                        PreferenceHelper.getInstance().getSessionString(PreferenceHelper.KEY_USER_ID), editTextBatasLapor.getText().toString().trim(),
+                        PreferenceHelper.getInstance().getSessionString(PreferenceHelper.KEY_NAME), editTextAsmin.getText().toString().trim());
                 controller.createGroup(group);
+
+                FormatRekapan formatRekapan = new FormatRekapan(Integer.parseInt(group.getId()), Symbol.divider, Symbol.star,
+                        "", Symbol.recycle, Symbol.mosque, Symbol.kabah,
+                        Symbol.tandaSilang, Symbol.home, getString(R.string.default_spirit_words), PreferenceHelper.getInstance().getSessionString(PreferenceHelper.KEY_USER_ID));
+                formatRekapanController.addRekapan(formatRekapan);
                 alertDialog.dismiss();
             }
         });

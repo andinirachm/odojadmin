@@ -51,7 +51,7 @@ public class ApplicationMain extends Application {
         firebaseDatabaseAdmin = firebaseInstance.getReference("admin");
         firebaseDatabaseGroup = firebaseInstance.getReference("group");
         firebaseDatabaseMember = firebaseInstance.getReference("member");
-        firebaseDatabaseRekapan= firebaseInstance.getReference("rekapan");
+        firebaseDatabaseRekapan= firebaseInstance.getReference("formatRekapan");
     }
 
     public EventBus getEventBus() {

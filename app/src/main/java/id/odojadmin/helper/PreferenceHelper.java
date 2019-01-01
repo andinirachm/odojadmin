@@ -16,6 +16,7 @@ public class PreferenceHelper {
     public static final String KEY_TOKEN = "token";
     public static final String KEY_NAME = "name";
     public static final String KEY_EMAIL = "email";
+    public static final String KEY_KONFETTI = "konfetti";
 
     public static final String KEY_LANGUAGE = "LANGUAGE";
     public static final String KEY_LANGUAGE_ID = "LANGUAGE_ID";
@@ -134,6 +135,9 @@ public class PreferenceHelper {
         return getSessionBoolean(KEY_IS_AUTHENTICATED);
     }
 
+    public boolean isKonfettiShowed() {
+        return getSessionBoolean(KEY_KONFETTI);
+    }
 
     public SharedPreferences.Editor getEditor() {
         return mPreferences.edit();

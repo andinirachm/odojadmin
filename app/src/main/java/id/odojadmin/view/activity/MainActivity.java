@@ -11,7 +11,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -24,7 +23,10 @@ import id.odojadmin.controller.UserController;
 import id.odojadmin.event.GetDetailUserEvent;
 import id.odojadmin.event.SubscriberPriority;
 import id.odojadmin.helper.PreferenceHelper;
+import id.odojadmin.view.fragment.BerandaFragment;
+import id.odojadmin.view.fragment.FormatRekapanFragment;
 import id.odojadmin.view.fragment.GroupFragment;
+import id.odojadmin.view.fragment.UserSettingFragment;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -67,7 +69,7 @@ public class MainActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         getSupportActionBar().setTitle("Beranda");
-        addFragment(GroupFragment.newInstance());
+        addFragment(BerandaFragment.newInstance());
         navigationView.getMenu().getItem(0).setChecked(true);
     }
 
@@ -81,28 +83,6 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -110,15 +90,16 @@ public class MainActivity extends BaseActivity
 
         if (id == R.id.nav_beranda) {
             getSupportActionBar().setTitle("Beranda");
-            addFragment(GroupFragment.newInstance());
+            addFragment(BerandaFragment.newInstance());
         } else if (id == R.id.nav_grup) {
             getSupportActionBar().setTitle("Grup");
             addFragment(GroupFragment.newInstance());
-
         } else if (id == R.id.nav_admin) {
-            startActivity(new Intent(this, UserSettingActivity.class));
+            getSupportActionBar().setTitle("Profil Pengguna");
+            addFragment(UserSettingFragment.newInstance());
         } else if (id == R.id.nav_format_rekapan) {
-            startActivity(new Intent(this, FormatRekapanActivity.class));
+            getSupportActionBar().setTitle("Format Rekapan");
+            addFragment(FormatRekapanFragment.newInstance());
         } else if (id == R.id.nav_keluar) {
             showDialogLogout();
         }

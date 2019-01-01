@@ -1,7 +1,7 @@
 package id.odojadmin.model;
 
-public class Rekapan {
-    private String batasLaporan;
+public class FormatRekapan {
+    private int idGroup;
     private String iconPembatas;
     private String iconKholas;
     private String iconBelumKholas;
@@ -9,10 +9,15 @@ public class Rekapan {
     private String iconKholas1Juz;
     private String iconKholasLebih1Juz;
     private String iconTidakKholas;
+    private String iconAlKahfi;
     private String spritWords;
+    private String adminId;
 
-    public Rekapan(String batasLaporan, String iconPembatas, String iconKholas, String iconBelumKholas, String iconKholasTelat, String iconKholas1Juz, String iconKholasLebih1Juz, String iconTidakKholas, String spritWords) {
-        this.batasLaporan = batasLaporan;
+    public FormatRekapan() {
+    }
+
+    public FormatRekapan(int idGroup, String iconPembatas, String iconKholas, String iconBelumKholas, String iconKholasTelat, String iconKholas1Juz, String iconKholasLebih1Juz, String iconTidakKholas, String iconAlKahfi, String spritWords, String adminId) {
+        this.idGroup = idGroup;
         this.iconPembatas = iconPembatas;
         this.iconKholas = iconKholas;
         this.iconBelumKholas = iconBelumKholas;
@@ -20,11 +25,17 @@ public class Rekapan {
         this.iconKholas1Juz = iconKholas1Juz;
         this.iconKholasLebih1Juz = iconKholasLebih1Juz;
         this.iconTidakKholas = iconTidakKholas;
+        this.iconAlKahfi = iconAlKahfi;
         this.spritWords = spritWords;
+        this.adminId= adminId;
     }
 
-    public String getBatasLaporan() {
-        return batasLaporan;
+    public String getIconAlKahfi() {
+        return iconAlKahfi;
+    }
+
+    public int getIdGroup() {
+        return idGroup;
     }
 
     public String getIconPembatas() {
@@ -57,5 +68,9 @@ public class Rekapan {
 
     public String getSpritWords() {
         return spritWords;
+    }
+
+    public String getAdminId() {
+        return adminId;
     }
 }

@@ -173,9 +173,7 @@ public class GroupController extends BaseController {
     }
 
     public void delete(final String groupId) {
-        System.out.println("GROUP DEL  " + groupId);
         Query query = ApplicationMain.getInstance().getFirebaseDatabaseGroup().child(groupId);
-        System.out.println("QUE " + ((DatabaseReference) query).getKey());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

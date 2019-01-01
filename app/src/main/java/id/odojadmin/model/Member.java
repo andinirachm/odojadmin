@@ -3,7 +3,7 @@ package id.odojadmin.model;
 public class Member {
     private int id;
     private String name;
-    private boolean isKholas;
+    private String kholas;
     private String juz;
     private String phone;
     private boolean isKarantina;
@@ -12,14 +12,18 @@ public class Member {
     public Member() {
     }
 
-    public Member(int id, String name, boolean isKholas, String juz, String phone, boolean isKarantina, int groupId) {
+    public Member(int id, String name, String kholas, String juz, String phone, boolean isKarantina, int groupId) {
         this.id = id;
         this.name = name;
-        this.isKholas = isKholas;
+        this.kholas = kholas;
         this.juz = juz;
         this.phone = phone;
         this.isKarantina = isKarantina;
         this.groupId = groupId;
+    }
+
+    public String getKholas() {
+        return kholas;
     }
 
     public int getId() {
@@ -28,10 +32,6 @@ public class Member {
 
     public String getName() {
         return name;
-    }
-
-    public boolean isKholas() {
-        return isKholas;
     }
 
     public String getJuz() {

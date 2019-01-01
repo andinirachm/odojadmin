@@ -12,23 +12,23 @@
             android:id="@+id/nav_grup"
             android:icon="@drawable/ic_people"
             android:title="Grup" />
+        <item
+            android:id="@+id/nav_admin"
+            android:icon="@drawable/ic_person"
+            android:title="Profil Pengguna" />
+        <item
+            android:id="@+id/nav_format_rekapan"
+            android:icon="@drawable/ic_format"
+            android:visible="false"
+            android:title="Format Rekapan" />
+        <item
+            android:id="@+id/nav_sg"
+            android:icon="@drawable/ic_format"
+            android:visible="false"
+            android:title="SG" />
+        <item
+            android:id="@+id/nav_keluar"
+            android:icon="@drawable/ic_exit"
+            android:title="Keluar" />
     </group>
-
-    <item android:title="Pengaturan">
-        <menu>
-            <item
-                android:id="@+id/nav_admin"
-                android:icon="@drawable/ic_person"
-                android:title="Pengguna" />
-            <item
-                android:id="@+id/nav_format_rekapan"
-                android:icon="@drawable/ic_format"
-                android:title="Format Rekapan" />
-            <item
-                android:id="@+id/nav_keluar"
-                android:icon="@drawable/ic_exit"
-                android:title="Keluar" />
-        </menu>
-    </item>
-
 </menu>

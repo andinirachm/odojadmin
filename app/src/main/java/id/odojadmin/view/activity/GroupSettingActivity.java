@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +39,8 @@ public class GroupSettingActivity extends AppCompatActivity {
     RecyclerView recyclerViewAdmin;
     @BindView(R.id.edit_text_batas_lapor)
     TAGBookEditText editTextBatasLapor;
+    @BindView(R.id.edit_text_asmin)
+    TAGBookEditText editTextAsmin;
 
     private Group group;
     private GroupController groupController;
@@ -60,6 +63,7 @@ public class GroupSettingActivity extends AppCompatActivity {
         textViewName.setText("Grup " + group.getId());
         textViewTotalMember.setText(group.getTotalMember() + " Member");
         editTextBatasLapor.setText(group.getJamKholas());
+        editTextAsmin.setText(group.getAsmin());
         editTextBatasLapor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,7 +128,9 @@ public class GroupSettingActivity extends AppCompatActivity {
     public void onViewClicked() {
         Map<String, Object> hashMap = new HashMap<>();
         hashMap.put("jamKholas", editTextBatasLapor.getText().toString().trim());
+        hashMap.put("asmin", editTextAsmin.getText().toString().trim());
         groupController.update(Integer.parseInt(group.getId()), hashMap);
+        Toast.makeText(this, "Grup berhasil diperbaharui", Toast.LENGTH_SHORT).show();
     }
 
     @Override

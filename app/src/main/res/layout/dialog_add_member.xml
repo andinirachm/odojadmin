@@ -48,6 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:hint="No"
+                    android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxEms="2"
                     android:maxLength="2"
@@ -73,42 +74,61 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:hint="Nama Member"
+                    android:imeOptions="actionNext"
                     android:inputType="textCapSentences"
                     android:textColor="@android:color/black"
                     android:textSize="15sp" />
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/text_input_phone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <LinearLayout
+            android:id="@+id/linear_layout_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/linear_layout_name"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="9dp"
+            android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
-            android:gravity="center">
+            android:orientation="horizontal">
 
-            <id.odojadmin.widget.TAGBookEditText
-                android:id="@+id/edit_text_phone"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_phone"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:hint="Nomor HP (Whatsapp Aktif)"
-                android:inputType="number"
-                android:textColor="@android:color/black"
-                android:textSize="15sp" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_weight="0.2"
+                android:gravity="center">
+
+                <id.odojadmin.widget.TAGBookEditText
+                    android:id="@+id/edit_text_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:hint="Nomor HP (Whatsapp Aktif)"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageButton
+                android:id="@+id/btn_contact"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="0.8"
+                android:background="@drawable/rect_blue_15"
+                android:src="@drawable/ic_contact" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linear_layout_juz"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_below="@id/text_input_phone"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linear_layout_phone"
             android:layout_marginTop="8dp"
-            android:layout_height="wrap_content">
+            android:orientation="horizontal">
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/text_input_juz"
@@ -116,8 +136,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_weight="0.5"
                 android:layout_marginRight="16dp"
+                android:layout_weight="0.5"
                 android:gravity="center">
 
                 <id.odojadmin.widget.TAGBookEditText
@@ -126,8 +146,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:hint="Juz Tilawah"
-                    android:maxLength="2"
                     android:inputType="number"
+                    android:maxLength="2"
                     android:textColor="@android:color/black"
                     android:textSize="15sp" />
             </android.support.design.widget.TextInputLayout>
@@ -138,9 +158,9 @@
                 android:layout_below="@id/text_input_phone"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="8dp"
-                android:layout_weight="0.4"
                 android:layout_marginRight="16dp"
                 android:layout_toRightOf="@id/text_input_juz"
+                android:layout_weight="0.4"
                 android:gravity="right">
 
                 <Button

@@ -1,98 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center_horizontal"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_centerHorizontal="true"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/circle_blue"
-        android:padding="20dp"
-        android:src="@drawable/ic_people_white" />
+        android:orientation="vertical">
 
-    <id.odojadmin.widget.TAGHeavyText
-        android:id="@+id/text_view_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:gravity="center"
-        android:text="Andini"
-        android:textColor="@android:color/black"
-        android:textSize="15sp" />
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/circle_blue"
+            android:padding="20dp"
+            android:src="@drawable/ic_people_white" />
 
-    <id.odojadmin.widget.TAGBookText
-        android:id="@+id/text_view_total_member"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginRight="16dp"
-        android:gravity="center"
-        android:text="Member Aktif"
-        android:textSize="14sp" />
-
-    <id.odojadmin.widget.TAGBoldText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:gravity="left"
-        android:text="Dikelola oleh :"
-        android:textSize="14sp"
-        android:textStyle="bold" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_admin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginRight="16dp"
-        tools:itemCount="2" />
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/text_input_batas_lapor"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/recycler_view_admin"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_weight="1">
-
-        <id.odojadmin.widget.TAGBookEditText
-            android:id="@+id/edit_text_batas_lapor"
+        <id.odojadmin.widget.TAGHeavyText
+            android:id="@+id/text_view_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:editable="false"
-            android:focusable="false"
-            android:hint="Waktu Batas Lapor"
-            android:inputType="number"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:gravity="center"
+            android:text="Andini"
+            android:textColor="@android:color/black"
             android:textSize="15sp" />
-    </android.support.design.widget.TextInputLayout>
 
-    <Button
-        android:id="@+id/btn_save"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_below="@id/text_input_batas_lapor"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/rect_blue"
-        android:text="Simpan"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white" />
-</LinearLayout>
+        <id.odojadmin.widget.TAGBookText
+            android:id="@+id/text_view_total_member"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="16dp"
+            android:gravity="center"
+            android:text="Member Aktif"
+            android:textSize="14sp" />
+
+        <id.odojadmin.widget.TAGBoldText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:gravity="left"
+            android:text="Dikelola oleh :"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_admin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="16dp"
+            tools:itemCount="2" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_input_batas_lapor"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recycler_view_admin"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1">
+
+            <id.odojadmin.widget.TAGBookEditText
+                android:id="@+id/edit_text_batas_lapor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:focusable="false"
+                android:hint="Waktu Batas Lapor"
+                android:inputType="number"
+                android:textSize="15sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1">
+
+            <id.odojadmin.widget.TAGBookEditText
+                android:id="@+id/edit_text_asmin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Asmin"
+                android:inputType="textCapSentences"
+                android:textSize="15sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_below="@id/text_input_batas_lapor"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/rect_blue"
+            android:text="Simpan"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

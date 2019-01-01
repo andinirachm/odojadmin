@@ -1,11 +1,18 @@
 package id.odojadmin.view.activity;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
@@ -15,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -44,6 +52,7 @@ import id.odojadmin.widget.TAGBoldText;
 import id.odojadmin.widget.TAGBookText;
 
 public class DetailGroupActivity extends BaseActivity {
+    private static final int PICK_CONTACT = 17;
     @BindView(R.id.text_view_name)
     TAGBoldText textViewName;
     @BindView(R.id.text_view_total_member)
@@ -64,8 +73,12 @@ public class DetailGroupActivity extends BaseActivity {
     private MemberAdapter adapter;
     private View viewDetail;
     private String juzSelected;
+    private EditText editTextPhone;
+    private View dialogView;
 
     private Group group;
+
+    public static final int RequestPermissionCode = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +87,8 @@ public class DetailGroupActivity extends BaseActivity {
         ButterKnife.bind(this);
         eventBus.register(this, SubscriberPriority.HIGH);
         viewDetail = getLayoutInflater().inflate(R.layout.dialog_detail_member, null);
+        LayoutInflater inflater = this.getLayoutInflater();
+        dialogView = inflater.inflate(R.layout.dialog_add_member, null);
 
         setRecyclerViewMember();
         groupId = getIntent().getIntExtra("groupId", 0);
@@ -82,7 +97,6 @@ public class DetailGroupActivity extends BaseActivity {
         groupController.getGroupDetail(String.valueOf(groupId));
         progressBar.setVisibility(View.VISIBLE);
         controller.getAllMemberByGroupId(groupId);
-
     }
 
     private void setRecyclerViewMember() {
@@ -180,13 +194,14 @@ public class DetailGroupActivity extends BaseActivity {
             juzSelected = "a";
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_add_member, null);
+        dialogView = inflater.inflate(R.layout.dialog_add_member, null);
         dialogBuilder.setView(dialogView);
         alertDialog = dialogBuilder.create();
         final TextView textViewInitial = dialogView.findViewById(R.id.text_view_initial);
         final EditText editTextName = dialogView.findViewById(R.id.edit_text_name);
+        final ImageButton btnContact = dialogView.findViewById(R.id.btn_contact);
         final EditText editTextNo = dialogView.findViewById(R.id.edit_text_no);
-        final EditText editTextPhone = dialogView.findViewById(R.id.edit_text_phone);
+        editTextPhone = dialogView.findViewById(R.id.edit_text_phone);
         final EditText editTextJuz = dialogView.findViewById(R.id.edit_text_juz);
         final Button btnAdd = dialogView.findViewById(R.id.btn_add);
         final Button btnA = dialogView.findViewById(R.id.btn_a);
@@ -230,6 +245,13 @@ public class DetailGroupActivity extends BaseActivity {
             btnA.setTextColor(getResources().getColor(android.R.color.white));
         }
 
+        btnContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                enableRuntimePermission();
+            }
+        });
+
 
         editTextName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -257,7 +279,7 @@ public class DetailGroupActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
-                Member member = new Member(Integer.parseInt(editTextNo.getText().toString().trim()), editTextName.getText().toString().trim(), false, editTextJuz.getText().toString().trim() + "-" + juzSelected, editTextPhone.getText().toString().trim(), false, groupId);
+                Member member = new Member(Integer.parseInt(editTextNo.getText().toString().trim()), editTextName.getText().toString().trim(), "b", editTextJuz.getText().toString().trim() + "-" + juzSelected, editTextPhone.getText().toString().trim(), false, groupId);
                 if (!isEdit) {
                     controller.addMember(member);
                 } else {
@@ -295,6 +317,15 @@ public class DetailGroupActivity extends BaseActivity {
 
 
         alertDialog.show();
+    }
+
+    public void readcontact() {
+        try {
+            Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+            startActivityForResult(intent, PICK_CONTACT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setRecyclerViewAdmin(Context context, List<String> userList) {
@@ -404,5 +435,64 @@ public class DetailGroupActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         eventBus.unregister(this);
+    }
+
+    @Override
+    public void onActivityResult(int RequestCode, int ResultCode, Intent ResultIntent) {
+        super.onActivityResult(RequestCode, ResultCode, ResultIntent);
+        switch (RequestCode) {
+            case (PICK_CONTACT):
+                if (ResultCode == Activity.RESULT_OK) {
+                    Uri uri;
+                    Cursor cursor1, cursor2;
+                    String TempNameHolder, TempNumberHolder, TempContactID, IDresult = "";
+                    int IDresultHolder;
+                    uri = ResultIntent.getData();
+                    cursor1 = getContentResolver().query(uri, null, null, null, null);
+                    if (cursor1.moveToFirst()) {
+                        TempNameHolder = cursor1.getString(cursor1.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                        TempContactID = cursor1.getString(cursor1.getColumnIndex(ContactsContract.Contacts._ID));
+                        IDresult = cursor1.getString(cursor1.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                        IDresultHolder = Integer.valueOf(IDresult);
+                        if (IDresultHolder == 1) {
+                            cursor2 = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + TempContactID, null, null);
+                            while (cursor2.moveToNext()) {
+                                TempNumberHolder = cursor2.getString(cursor2.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                editTextPhone.setText(TempNumberHolder);
+                            }
+                        }
+
+                    }
+                }
+                break;
+        }
+    }
+
+    private void enableRuntimePermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(DetailGroupActivity.this,
+                Manifest.permission.READ_CONTACTS)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (checkSelfPermission(Manifest.permission.READ_CONTACTS)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},
+                            RequestPermissionCode);
+                    return;
+                }
+            }
+        } else {
+            ActivityCompat.requestPermissions(DetailGroupActivity.this, new String[]{
+                    Manifest.permission.READ_CONTACTS}, RequestPermissionCode);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int RC, String per[], int[] PResult) {
+        switch (RC) {
+            case RequestPermissionCode:
+                if (PResult.length > 0 && PResult[0] == PackageManager.PERMISSION_GRANTED) {
+                    readcontact();
+                }
+                break;
+        }
     }
 }

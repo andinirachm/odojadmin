@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#5DBCD2</color>
+    <color name="colorPrimaryLight">#75c1d2</color>
     <color name="colorPrimaryDark">#4fa0b3</color>
     <color name="colorAccent">#5DBCD2</color>
     <color name="light_grey">#CBCBCB</color>
+
+    <color name="lt_yellow">#fce18a</color>
+    <color name="lt_orange">#ff726d</color>
+    <color name="lt_purple">#b48def</color>
+    <color name="lt_pink">#f4306d</color>
+    <color name="whiter_tran">#92ffffff</color>
 </resources>

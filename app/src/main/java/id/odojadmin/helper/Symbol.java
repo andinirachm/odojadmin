@@ -19,12 +19,21 @@ public class Symbol {
     public static final String nine = "\u0039\u20E3";
 
     public static final String tandaTanya = "\u2753";
+    public static final String tunjukKanan = "\uD83D\uDC49\uD83C\uDFFB";
     public static final String tandaSilang = "\u274c";
+    public static final String star = "\u2B50";
     public static final String calendar = "\uD83D\uDCC5";
     public static final String cd = "\uD83D\uDCBF";
     public static final String book = "\uD83D\uDCD6";
-    public static final String recycle = "\u267B";
+    public static final String yellowBook = " \uD83D\uDCD2";
+    public static final String recycle = "\u267B\uFE0F";
     public static final String batasLapor = "\u26D4";
+    public static final String mosque = "\uD83D\uDD4C";
+    public static final String kabah = "\uD83D\uDD4B";
+    public static final String fiveHand = "\uD83D\uDD90\uD83C\uDFFB";
+    public static final String home = "\uD83C\uDFE1";
+    public static final String dividerTotalKholas = "\u2796\u2796\u2796\u2796\u2796\u2796\u2796\u2796\u2796\u2796";
+    public static final String haid = "\uD83D\uDE45\uD83C\uDFFB\u200D";
 
     public static final String sunFlower ="\uD83C\uDF3B";
     public static final String divider ="\uD83C\uDF3F\uD83C\uDF3B\uD83C\uDF3F\uD83C\uDF3B\uD83C\uDF3F\uD83C\uDF3B\uD83C\uDF3F\uD83C\uDF3B\uD83C\uDF3F\uD83C\uDF3B\uD83C\uDF3F";
