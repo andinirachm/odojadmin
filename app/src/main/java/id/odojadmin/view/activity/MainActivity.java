@@ -22,6 +22,7 @@ import id.odojadmin.R;
 import id.odojadmin.controller.UserController;
 import id.odojadmin.event.GetDetailUserEvent;
 import id.odojadmin.event.SubscriberPriority;
+import id.odojadmin.helper.DateHelper;
 import id.odojadmin.helper.PreferenceHelper;
 import id.odojadmin.view.fragment.BerandaFragment;
 import id.odojadmin.view.fragment.FormatRekapanFragment;
@@ -71,6 +72,8 @@ public class MainActivity extends BaseActivity
         getSupportActionBar().setTitle("Beranda");
         addFragment(BerandaFragment.newInstance());
         navigationView.getMenu().getItem(0).setChecked(true);
+        DateHelper dateHelper = new DateHelper();
+        System.out.println("HOLA " + dateHelper.getYesterdayDateString() + " - " + dateHelper.getTomorrowDateString());
     }
 
     @Override

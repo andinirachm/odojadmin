@@ -1,9 +1,6 @@
 package id.odojadmin.view.activity;
 
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +26,7 @@ import id.odojadmin.R;
 import id.odojadmin.controller.FormatRekapanController;
 import id.odojadmin.controller.GroupController;
 import id.odojadmin.controller.MemberController;
+import id.odojadmin.controller.RekapanHarianController;
 import id.odojadmin.event.GetDetailGroupEvent;
 import id.odojadmin.event.GetFormatRekapanByGroupIdEvent;
 import id.odojadmin.event.GetMemberByGroupIdEvent;
@@ -36,10 +34,11 @@ import id.odojadmin.event.KholasClickEvent;
 import id.odojadmin.event.NotKholasClickEvent;
 import id.odojadmin.event.SubscriberPriority;
 import id.odojadmin.event.WhatsappClickEvent;
-import id.odojadmin.helper.RekapanHelper;
+import id.odojadmin.helper.DateHelper;
 import id.odojadmin.model.FormatRekapan;
 import id.odojadmin.model.Group;
 import id.odojadmin.model.Member;
+import id.odojadmin.model.RekapHarian;
 import id.odojadmin.view.adapter.RekapAdapter;
 import id.odojadmin.widget.TAGBoldText;
 import id.odojadmin.widget.TAGBookText;
@@ -59,8 +58,10 @@ public class DetailRekapanActivity extends BaseActivity {
     @BindView(R.id.text_view_persentase)
     TAGMediumText textViewPersentase;
     private List<Member> memberList = new ArrayList<>();
+    private List<RekapHarian> rekapHarianList = new ArrayList<>();
     private MemberController controller;
     private GroupController groupController;
+    private RekapanHarianController rekapanHarianController;
     private FormatRekapanController formatRekapanController;
     private int groupId;
     private RekapAdapter adapter;
@@ -84,6 +85,7 @@ public class DetailRekapanActivity extends BaseActivity {
         groupId = getIntent().getIntExtra("groupId", 0);
         controller = new MemberController();
         groupController = new GroupController();
+        rekapanHarianController = new RekapanHarianController();
         formatRekapanController = new FormatRekapanController();
         formatRekapanController.getRekapan(groupId);
         groupController.getGroupDetail(String.valueOf(groupId));
@@ -110,6 +112,9 @@ public class DetailRekapanActivity extends BaseActivity {
                     totalKholas = totalKholas + 1;
             }
 
+            RekapHarian rekapHarian = new RekapHarian(groupId + "-" + DateHelper.getSimpleDate(), groupId, DateHelper.getSimpleDate2(), 0, memberList.size(), memberList);
+            rekapanHarianController.addRekapan(rekapHarian);
+
             setTotalKholas(totalKholas);
         }
     }
@@ -123,10 +128,9 @@ public class DetailRekapanActivity extends BaseActivity {
             crpv.setPercent(p);
             pr = p;
 
-            if (group.getTotalMember() != 0){
+            if (group.getTotalMember() != 0) {
                 textViewPersentase.setText(String.format("%,.0f", p) + "%");
-            }
-            else
+            } else
                 textViewPersentase.setText("0%");
         }
     }
@@ -202,21 +206,22 @@ public class DetailRekapanActivity extends BaseActivity {
 
     @OnClick(R.id.fab)
     public void onViewClicked() {
-        if (group != null && formatRekapan != null) {
-            PackageManager pm = getPackageManager();
-            try {
-                Intent waIntent = new Intent(Intent.ACTION_SEND);
-                waIntent.setType("text/plain");
-                String text = RekapanHelper.getRekapan(group, "Rena", formatRekapan, memberList);
-                PackageInfo info = pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
-                waIntent.setPackage("com.whatsapp");
-                waIntent.putExtra(Intent.EXTRA_TEXT, text);
-                startActivity(Intent.createChooser(waIntent, "Bagikan dengan"));
-            } catch (PackageManager.NameNotFoundException e) {
-                Toast.makeText(this, "WhatsApp belum terinstal", Toast.LENGTH_SHORT)
-                        .show();
-            }
-        }
+//        if (group != null && formatRekapan != null) {
+//            PackageManager pm = getPackageManager();
+//            try {
+//                Intent waIntent = new Intent(Intent.ACTION_SEND);
+//                waIntent.setType("text/plain");
+//                String text = RekapanHelper.getRekapan(group, "Rena", formatRekapan, memberList);
+//                PackageInfo info = pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
+//                waIntent.setPackage("com.whatsapp");
+//                waIntent.putExtra(Intent.EXTRA_TEXT, text);
+//                startActivity(Intent.createChooser(waIntent, "Bagikan dengan"));
+//            } catch (PackageManager.NameNotFoundException e) {
+//                Toast.makeText(this, "WhatsApp belum terinstal", Toast.LENGTH_SHORT)
+//                        .show();
+//            }
+//        }
 
+        rekapanHarianController.getRekapanByDate(DateHelper.getSimpleDate2(), groupId);
     }
 }

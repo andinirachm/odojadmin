@@ -86,10 +86,39 @@ public class DateHelper {
         return dayId + ", " + date + " " + month + " " + year;
     }
 
-    public static String getCurrentDate2() {
+    public static String getSimpleDate() {
+        SimpleDateFormat sdfDate = new SimpleDateFormat("ddMMyyyy");
+        Date now = new Date();
+        String strDate = sdfDate.format(now);
+        return strDate;
+    }
+
+    public static String getSimpleDate2() {
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
         Date now = new Date();
         String strDate = sdfDate.format(now);
         return strDate;
+    }
+
+    private Date yesterday() {
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        return cal.getTime();
+    }
+
+    private Date tomorrow() {
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, +1);
+        return cal.getTime();
+    }
+
+    public String getYesterdayDateString() {
+        SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
+        return sdfDate.format(yesterday());
+    }
+
+    public String getTomorrowDateString() {
+        SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
+        return sdfDate.format(tomorrow());
     }
 }
