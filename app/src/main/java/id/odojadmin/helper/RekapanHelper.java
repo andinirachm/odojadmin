@@ -129,4 +129,26 @@ public class RekapanHelper {
         stringBuilder.append("*#salam" + Symbol.fiveHand + "lembar*\n");
         return stringBuilder.toString();
     }
+
+    public static String getNextJuz(int juz, String ab) {
+        int juzNew = juz;
+        String abStr = "";
+        if (juz == 30 && ab.equals("b")) {
+            juzNew = 1;
+            abStr = "a";
+        } else {
+            if (ab.equals("a")) {
+                abStr = "b";
+            } else if (ab.equals("b")) {
+                abStr = "a";
+                juzNew = juz + 1;
+            } else if (ab.equals("ab")) {
+                abStr = "a";
+                juzNew = juz + 1;
+            }
+        }
+
+        return juzNew + "-" + abStr;
+    }
+
 }
