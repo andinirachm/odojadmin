@@ -1,6 +1,10 @@
 package id.odojadmin.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+import id.odojadmin.ApplicationMain;
 
 public class Group implements Serializable {
     private String id; //not editable
@@ -21,6 +25,7 @@ public class Group implements Serializable {
         this.adminId = adminId;
         this.jamKholas = jamKholas;
         this.adminName = adminName;
+        this.asmin = asmin;
     }
 
     public String getId() {
@@ -65,5 +70,17 @@ public class Group implements Serializable {
 
     public String getAsmin() {
         return asmin;
+    }
+
+    public void createGroup(Group group) {
+        ApplicationMain.getInstance().getFirebaseDatabaseGroup().child(id).setValue(group);
+    }
+
+    public void updateGroup(int groupId, Map<String, Object> map) {
+        ApplicationMain.getInstance().getFirebaseDatabaseGroup().child(String.valueOf(groupId)).updateChildren(map);
+    }
+
+    public void deleteGroup(int group) {
+        ApplicationMain.getInstance().getFirebaseDatabaseGroup().child(String.valueOf(group)).removeValue();
     }
 }

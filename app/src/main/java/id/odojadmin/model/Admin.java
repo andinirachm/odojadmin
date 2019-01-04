@@ -1,5 +1,15 @@
 package id.odojadmin.model;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Map;
+
+import id.odojadmin.ApplicationMain;
+import id.odojadmin.event.LoginEvent;
+
 /**
  * Created by Andini Rachmah on 11/12/18.
  */
@@ -16,14 +26,13 @@ public class Admin {
     }
 
     public Admin(String noAdmin, String name, String totalGroup, String origin, String email, String password, String phone) {
-
         this.noAdmin = noAdmin;
         this.name = name;
         this.totalGroup = totalGroup;
         this.origin = origin;
         this.email = email;
         this.password = password;
-        this.phone= phone;
+        this.phone = phone;
     }
 
     public String getNoAdmin() {
@@ -76,5 +85,20 @@ public class Admin {
 
     public String getPhone() {
         return phone;
+    }
+
+    public void createAdmin(Admin admin) {
+        String id = admin.getEmail().replace("@", "");
+        id = id.replace(".", "");
+        id = id.replace("_", "");
+        ApplicationMain.getInstance().getFirebaseDatabaseAdmin().child(id).setValue(admin);
+    }
+
+    public void updateAdmin(String adminId, Map<String, Object> map) {
+        ApplicationMain.getInstance().getFirebaseDatabaseAdmin().child(adminId).updateChildren(map);
+    }
+
+    public void deleteAdmin(String adminId) {
+        ApplicationMain.getInstance().getFirebaseDatabaseAdmin().child(adminId).removeValue();
     }
 }

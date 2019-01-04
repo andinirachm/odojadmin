@@ -11,14 +11,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import id.odojadmin.ApplicationMain;
 import id.odojadmin.event.CommonEvent;
-import id.odojadmin.model.Member;
-import id.odojadmin.model.MemberHarian;
+import id.odojadmin.event.GetRekapanHarianByDateGroupIdEvent;
 import id.odojadmin.model.RekapHarian;
 
 /**
@@ -27,33 +24,29 @@ import id.odojadmin.model.RekapHarian;
 
 public class RekapanHarianController extends BaseController {
     public void getRekapanByDate(final String date, final int group) {
-        final List<MemberHarian> memberList = new ArrayList<>();
-        ApplicationMain.getInstance().getFirebaseDbRekapHarian().orderByChild("date").addValueEventListener(new ValueEventListener() {
+        Query query = ApplicationMain.getInstance().getFirebaseDbRekapHarian();
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChildren()) {
-                    memberList.clear();
                     RekapHarian rekapHarian = null;
                     for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                         rekapHarian = noteDataSnapshot.getValue(RekapHarian.class);
                         if (rekapHarian.getDate().equals(date) && rekapHarian.getGroupId() == group) {
                             break;
                         }
+                    }
 
-                    }
-                    System.out.println("HALO Y " + rekapHarian.getDate() +" - "+ rekapHarian.getMemberHarianList().size());
-                    for (Member m : rekapHarian.getMemberHarianList()) {
-                        System.out.println("HALO YA " + m.getName() + " - " + m.getJuz());
-                    }
+                    System.out.println("olaf lala " + rekapHarian.getDate());
+                    eventBus.post(new GetRekapanHarianByDateGroupIdEvent(true, "Success", rekapHarian));
                 } else {
-                    System.out.println("HALO N");
+                    eventBus.post(new GetRekapanHarianByDateGroupIdEvent(false, "Failure", null));
                 }
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                System.out.println("HALO N");
+                eventBus.post(new GetRekapanHarianByDateGroupIdEvent(false, "Failure", null));
             }
         });
     }

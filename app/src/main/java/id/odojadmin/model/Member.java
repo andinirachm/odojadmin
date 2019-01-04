@@ -1,5 +1,9 @@
 package id.odojadmin.model;
 
+import java.util.Map;
+
+import id.odojadmin.ApplicationMain;
+
 public class Member {
     private int id;
     private String name;
@@ -20,6 +24,10 @@ public class Member {
         this.phone = phone;
         this.isKarantina = isKarantina;
         this.groupId = groupId;
+    }
+
+    public void setJuz(String juz) {
+        this.juz = juz;
     }
 
     public String getKholas() {
@@ -48,5 +56,17 @@ public class Member {
 
     public int getGroupId() {
         return groupId;
+    }
+
+    public void createMember(String id, Member member) { //id = 137-Ilma
+        ApplicationMain.getInstance().getFirebaseDatabaseMember().child(name).setValue(member);
+    }
+
+    public void updateMember(String id, Map<String, Object> map) {
+        ApplicationMain.getInstance().getFirebaseDatabaseMember().child(name).updateChildren(map);
+    }
+
+    public void deleteMember(String id) {
+        ApplicationMain.getInstance().getFirebaseDatabaseMember().child(id).removeValue();
     }
 }

@@ -31,21 +31,16 @@
             android:name=".view.activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoTitleBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".view.activity.MainActivity"
             android:label="@string/title_activity_main"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.activity.UserSettingActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".view.activity.CreateGroupActivity"
+        <activity
+            android:name=".view.activity.UserSettingActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.DetailGroupActivity"
@@ -55,8 +50,16 @@
             android:name=".view.activity.DetailRekapanActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoTitleBar" />
-        <activity android:name=".view.activity.GroupSettingActivity"
+        <activity
+            android:name=".view.activity.GroupSettingActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".view.TestActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
