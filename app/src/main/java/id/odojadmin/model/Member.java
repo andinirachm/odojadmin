@@ -34,6 +34,10 @@ public class Member {
         return kholas;
     }
 
+    public void setKholas(String kholas) {
+        this.kholas = kholas;
+    }
+
     public int getId() {
         return id;
     }
@@ -62,7 +66,7 @@ public class Member {
         ApplicationMain.getInstance().getFirebaseDatabaseMember().child(name).setValue(member);
     }
 
-    public void updateMember(String id, Map<String, Object> map) {
+    public void updateMember(String name, Map<String, Object> map) {
         ApplicationMain.getInstance().getFirebaseDatabaseMember().child(name).updateChildren(map);
     }
 

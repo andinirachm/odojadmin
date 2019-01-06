@@ -1,6 +1,9 @@
 package id.odojadmin.model;
 
 import java.util.List;
+import java.util.Map;
+
+import id.odojadmin.ApplicationMain;
 
 public class RekapHarian {
     private String id;
@@ -44,5 +47,17 @@ public class RekapHarian {
 
     public List<Member> getMemberHarianList() {
         return memberHarianList;
+    }
+
+    public void createRekapHarian(RekapHarian group) {
+        ApplicationMain.getInstance().getFirebaseDbRekapHarian().child(id).setValue(group);
+    }
+
+    public void updateRekapHarian(int groupId, Map<String, Object> map) {
+        ApplicationMain.getInstance().getFirebaseDbRekapHarian().child(String.valueOf(groupId)).updateChildren(map);
+    }
+
+    public void deleteGroupRekapHarian(int group) {
+        ApplicationMain.getInstance().getFirebaseDbRekapHarian().child(String.valueOf(group)).removeValue();
     }
 }

@@ -106,6 +106,12 @@ public class DateHelper {
         return cal.getTime();
     }
 
+    private Date today() {
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, 0);
+        return cal.getTime();
+    }
+
     private Date tomorrow() {
         final Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, +1);
@@ -115,6 +121,11 @@ public class DateHelper {
     public String getYesterdayDateString() {
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
         return sdfDate.format(yesterday());
+    }
+
+    public String getTodayDateString() {
+        SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
+        return sdfDate.format(today());
     }
 
     public String getTomorrowDateString() {
