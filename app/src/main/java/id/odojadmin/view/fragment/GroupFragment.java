@@ -128,6 +128,7 @@ public class GroupFragment extends BaseFragment {
                         "", Symbol.recycle, Symbol.mosque, Symbol.kabah,
                         Symbol.tandaSilang, Symbol.home, getString(R.string.default_spirit_words), PreferenceHelper.getInstance().getSessionString(PreferenceHelper.KEY_USER_ID));
                 formatRekapanController.addRekapan(formatRekapan);
+
                 alertDialog.dismiss();
             }
         });

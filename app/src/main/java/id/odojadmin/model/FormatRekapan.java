@@ -1,5 +1,9 @@
 package id.odojadmin.model;
 
+import java.util.Map;
+
+import id.odojadmin.ApplicationMain;
+
 public class FormatRekapan {
     private int idGroup;
     private String iconPembatas;
@@ -72,5 +76,17 @@ public class FormatRekapan {
 
     public String getAdminId() {
         return adminId;
+    }
+
+    public void createFormatRekapan(FormatRekapan formatRekapan) {
+        ApplicationMain.getInstance().getFirebaseDatabaseRekapan().child(String.valueOf(formatRekapan.getIdGroup())).setValue(formatRekapan);
+    }
+
+    public void updateFormatRekapan(String name, Map<String, Object> map) {
+        ApplicationMain.getInstance().getFirebaseDatabaseRekapan().child(name).updateChildren(map);
+    }
+
+    public void deleteFormatRekapan(String id) {
+        ApplicationMain.getInstance().getFirebaseDatabaseRekapan().child(id).removeValue();
     }
 }

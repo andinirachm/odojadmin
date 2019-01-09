@@ -80,6 +80,10 @@ public class Group implements Serializable {
         ApplicationMain.getInstance().getFirebaseDatabaseGroup().child(String.valueOf(groupId)).updateChildren(map);
     }
 
+    public void updateAdmin(int groupId, Map<String, Object> map) {
+        ApplicationMain.getInstance().getFirebaseDatabaseGroup().child(String.valueOf(groupId)).updateChildren(map);
+    }
+
     public void deleteGroup(int group) {
         ApplicationMain.getInstance().getFirebaseDatabaseGroup().child(String.valueOf(group)).removeValue();
     }

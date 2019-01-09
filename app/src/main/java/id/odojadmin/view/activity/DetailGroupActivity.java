@@ -44,6 +44,7 @@ import id.odojadmin.event.GetDetailGroupEvent;
 import id.odojadmin.event.GetMemberByGroupIdEvent;
 import id.odojadmin.event.MemberClickEvent;
 import id.odojadmin.event.SubscriberPriority;
+import id.odojadmin.model.FormatRekapan;
 import id.odojadmin.model.Group;
 import id.odojadmin.model.Member;
 import id.odojadmin.view.adapter.AdminAdapter;
@@ -406,13 +407,19 @@ public class DetailGroupActivity extends BaseActivity {
     @OnClick(R.id.btn_setting_group)
     public void onBtnSettingGroupClicked() {
         //addAdmin("dewigmailcom");
-        if (group != null) {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("group", group);
-            Intent intent = new Intent(this, GroupSettingActivity.class);
-            intent.putExtras(bundle);
-            startActivity(intent);
-        }
+//        if (group != null) {
+//            Bundle bundle = new Bundle();
+//            bundle.putSerializable("group", group);
+//            Intent intent = new Intent(this, GroupSettingActivity.class);
+//            intent.putExtras(bundle);
+//            startActivity(intent);
+//        }
+        Group group = new Group();
+        group.deleteGroup(groupId);
+
+        FormatRekapan formatRekapan = new FormatRekapan();
+        formatRekapan.deleteFormatRekapan(String.valueOf(groupId));
+        finish();
     }
 
     private void addAdmin(String adminId) {

@@ -116,7 +116,7 @@ public class SignInActivity extends BaseActivity {
                 PreferenceHelper.getInstance().saveSession(PreferenceHelper.KEY_USER_ID, id);
                 PreferenceHelper.getInstance().saveSession(PreferenceHelper.KEY_NAME, adminLoggedIn.getName());
                 PreferenceHelper.getInstance().saveSession(PreferenceHelper.KEY_EMAIL, editTextEmail.getText().toString().trim());
-                Toast.makeText(SignInActivity.this, "Berhasil Login " + adminLoggedIn.getName(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(SignInActivity.this, "Berhasil Login " + adminLoggedIn.getName(), Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(this, MainActivity.class);
                 i.putExtra("name", adminLoggedIn.getName());
                 i.putExtra("email", adminLoggedIn.getEmail());
