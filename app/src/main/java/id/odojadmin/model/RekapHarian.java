@@ -16,7 +16,7 @@ public class RekapHarian {
     public RekapHarian() {
     }
 
-    public RekapHarian(String  id, int groupId, String date, int totalKholas, int totalMember, List<Member> memberHarianList) {
+    public RekapHarian(String id, int groupId, String date, int totalKholas, int totalMember, List<Member> memberHarianList) {
         this.id = id;
         this.groupId = groupId;
         this.date = date;
@@ -55,6 +55,11 @@ public class RekapHarian {
 
     public void updateRekapHarian(int groupId, Map<String, Object> map) {
         ApplicationMain.getInstance().getFirebaseDbRekapHarian().child(String.valueOf(groupId)).updateChildren(map);
+    }
+
+    public void updateTilawah(int groupId, String date, int idMember, Map<String, Object> map) {
+        ApplicationMain.getInstance().getFirebaseDbRekapHarian().child(String.valueOf(groupId) + "-" + date).
+                child("memberHarianList").child(String.valueOf(idMember)).updateChildren(map);
     }
 
     public void deleteGroupRekapHarian(int group) {

@@ -107,7 +107,7 @@ public class DetailRekapanActivity extends BaseActivity {
         progressBar.setVisibility(View.VISIBLE);
         ApplicationMain.getInstance().getFirebaseDbRekapHarian().orderByChild("date").addValueEventListener(eventListener);
         //rekapanHarianController.getRekapanByDate(DateHelper.getSimpleDate(), groupId);
-        if (memberList.size() != 0) formatRekapanController.getRekapan(groupId);
+        formatRekapanController.getRekapan(groupId);
     }
 
     private void setRecyclerViewMember() {
@@ -141,6 +141,12 @@ public class DetailRekapanActivity extends BaseActivity {
         Map<String, Object> hashMap = new HashMap<>();
         hashMap.put("kholas", "k");
         controller.update(event.getMember().getName(), hashMap);
+
+        rekapHarian = new RekapHarian();
+        rekapHarian.updateTilawah(groupId, DateHelper.getSimpleDate(), event.getPosition(), hashMap);
+
+        memberList.get(event.getPosition()).setKholas("k");
+        adapter.notifyItemChanged(event.getPosition());
     }
 
     public void onEventMainThread(NotKholasClickEvent event) {
@@ -148,6 +154,11 @@ public class DetailRekapanActivity extends BaseActivity {
         Map<String, Object> hashMap = new HashMap<>();
         hashMap.put("kholas", "t");
         controller.update(event.getMember().getName(), hashMap);
+
+        rekapHarian = new RekapHarian();
+        rekapHarian.updateTilawah(groupId, DateHelper.getSimpleDate(), event.getPosition(), hashMap);
+        memberList.get(event.getPosition()).setKholas("t");
+        adapter.notifyItemChanged(event.getPosition());
     }
 
     public void onEventMainThread(GetFormatRekapanByGroupIdEvent event) {
@@ -217,6 +228,12 @@ public class DetailRekapanActivity extends BaseActivity {
                         .show();
             }
         }
+
+        if (group == null) {
+            Toast.makeText(this, "GROUP NULL", Toast.LENGTH_SHORT).show();
+        } else if (formatRekapan == null) {
+            Toast.makeText(this, "FORMAT REKAPAN NULL", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @OnClick(R.id.relative_layout_progres)
@@ -240,7 +257,8 @@ public class DetailRekapanActivity extends BaseActivity {
                 if (rekapHarian.getGroupId() == groupId) {
                     if (rekapHarian.getDate().equals(currentDate)) {
                         isFound = true;
-                        memberList.addAll(rekapHarian.getMemberHarianList());
+                        if (rekapHarian.getMemberHarianList() != null)
+                            memberList.addAll(rekapHarian.getMemberHarianList());
                     }
                 }
             }
@@ -258,22 +276,23 @@ public class DetailRekapanActivity extends BaseActivity {
                 System.out.println("HOLA CREATE");
                 memberList.clear();
                 ApplicationMain.getInstance().getFirebaseDbRekapHarian().removeEventListener(eventListener);
-                ApplicationMain.getInstance().getFirebaseDatabaseMember().addValueEventListener(new ValueEventListener() {
+                ApplicationMain.getInstance().getFirebaseDatabaseMember().orderByChild("id").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             Member member = snapshot.getValue(Member.class);
                             if (member.getGroupId() == groupId) {
                                 memberList.add(member);
+                                System.out.println("MUHUHU : " + member.getId() + " - " + member.getName());
 
                                 if (member.getKholas().equals("k"))
                                     totalKholas = totalKholas + 1;
                             }
                         }
+//                        ApplicationMain.getInstance().getFirebaseDatabaseMember().child()
 
                         RekapHarian rekapHarian = new RekapHarian(groupId + "-" + DateHelper.getSimpleDate(), groupId, DateHelper.getSimpleDate2(), 0, memberList.size(), memberList);
                         rekapHarian.createRekapHarian(rekapHarian);
-
                         adapter.notifyDataSetChanged();
                     }
 
@@ -320,18 +339,17 @@ public class DetailRekapanActivity extends BaseActivity {
     private void setDataRekapanHarian() {
         memberList.clear();
         ApplicationMain.getInstance().getFirebaseDbRekapHarian().removeEventListener(eventListener);
-        Query query = ApplicationMain.getInstance().getFirebaseDbRekapHarian().child("137-05012019").child("memberHarianList").orderByChild("id");
+        Query query = ApplicationMain.getInstance().getFirebaseDbRekapHarian().child(groupId + "-" + DateHelper.getSimpleDate()).child("memberHarianList").orderByChild("id");
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Member member = ds.getValue(Member.class);
                     System.out.println("HOLA " + member.getName() + " - " + member.getJuz());
-                    member.setKholas("k");
-                    ds.child("kholas").getRef().setValue("k");
+                    //member.setKholas("k");
+                    //ds.child("kholas").getRef().setValue("k");
                     memberList.add(member);
                 }
-                //setDataMemberOnRekapanHarian();
                 adapter.notifyDataSetChanged();
             }
 
