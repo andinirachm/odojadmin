@@ -34,14 +34,20 @@ public class FormatRekapanController extends BaseController {
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                             FormatRekapan rekapan = noteDataSnapshot.getValue(FormatRekapan.class);
-                            if (rekapan.getIdGroup() == id) {
-                                rekapanList.add(rekapan);
-                            }
+                            if (rekapan != null)
+                                if (rekapan.getIdGroup() == id) {
+                                    rekapanList.add(rekapan);
+                                }
                         }
-                        eventBus.post(new GetFormatRekapanByGroupIdEvent(true, "success", rekapanList.get(0)));
-                    }
+                        if (rekapanList != null) {
+                            System.out.println("POPO tidak null ");
+                            eventBus.post(new GetFormatRekapanByGroupIdEvent(true, "success", rekapanList.get(0)));
+                        } else {
+                            System.out.println("POPO null ");
+                            eventBus.post(new GetFormatRekapanByGroupIdEvent(false, "failure", null));
+                        }
 
-                    else{
+                    } else {
                         eventBus.post(new GetFormatRekapanByGroupIdEvent(false, "failure", null));
                     }
                 } else {
@@ -72,9 +78,7 @@ public class FormatRekapanController extends BaseController {
                             }
                         }
                         eventBus.post(new GetFormatRekapanByGroupIdEvent(true, "success", rekapanList.get(0)));
-                    }
-
-                    else{
+                    } else {
                         eventBus.post(new GetFormatRekapanByGroupIdEvent(false, "failure", null));
                     }
                 } else {

@@ -107,7 +107,7 @@ public class DetailRekapanActivity extends BaseActivity {
         progressBar.setVisibility(View.VISIBLE);
         ApplicationMain.getInstance().getFirebaseDbRekapHarian().orderByChild("date").addValueEventListener(eventListener);
         //rekapanHarianController.getRekapanByDate(DateHelper.getSimpleDate(), groupId);
-        formatRekapanController.getRekapan(groupId);
+        getRekapan(groupId);
     }
 
     private void setRecyclerViewMember() {
@@ -162,12 +162,7 @@ public class DetailRekapanActivity extends BaseActivity {
     }
 
     public void onEventMainThread(GetFormatRekapanByGroupIdEvent event) {
-        System.out.println("FORMAT REKAPAN : " + event.isSuccess());
-        if (event.isSuccess()) {
-            formatRekapan = event.getRekapan();
-        } else {
-            formatRekapan = null;
-        }
+
     }
 
     private void setTotalKholas(int totalKholas) {
@@ -361,32 +356,44 @@ public class DetailRekapanActivity extends BaseActivity {
         query.addListenerForSingleValueEvent(valueEventListener);
     }
 
-    private void ref() {
-        memberList.clear();
-        ApplicationMain.getInstance().getFirebaseDbRekapHarian().removeEventListener(eventListener);
-        Query query = ApplicationMain.getInstance().getFirebaseDbRekapHarian().child("137-05012019").child("memberHarianList").orderByChild("id");
-        ValueEventListener valueEventListener = new ValueEventListener() {
+    public void getRekapan(final int id) {
+        final List<FormatRekapan> rekapanList = new ArrayList<>();
+        ApplicationMain.getInstance().getFirebaseDatabaseRekapan().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Member member = ds.getValue(Member.class);
-                    String[] jz = member.getJuz().split("-");
-                    String juz = jz[0];
-                    String ab = jz[1];
-                    System.out.println("HOLA " + member.getName() + " - " + member.getJuz());
-                    member.setJuz(RekapanHelper.getNextJuz(Integer.parseInt(juz), ab));
-                    ds.child("juz").getRef().setValue(RekapanHelper.getNextJuz(Integer.parseInt(juz), ab));
-                    memberList.add(member);
+                if (dataSnapshot.hasChildren()) {
+                    rekapanList.clear();
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                            FormatRekapan rekapan = noteDataSnapshot.getValue(FormatRekapan.class);
+                            if (rekapan != null)
+                                if (rekapan.getIdGroup() == id) {
+                                    rekapanList.add(rekapan);
+                                }
+                        }
+                        if (rekapanList != null) {
+                            if (rekapanList.size() != 0)
+                                formatRekapan = rekapanList.get(0);
+                            else
+                                formatRekapan = null;
+                        } else {
+                            formatRekapan = null;
+                        }
+
+                    } else {
+                        formatRekapan = null;
+                    }
+                } else {
+                    formatRekapan = null;
                 }
-                //setDataMemberOnRekapanHarian();
-                adapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onCancelled(DatabaseError databaseError) {
+                formatRekapan = null;
             }
-        };
+        });
 
-        query.addListenerForSingleValueEvent(valueEventListener);
     }
+
 }
